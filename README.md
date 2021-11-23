@@ -1,5 +1,13 @@
 # ARCH pre-training: reproducing results from "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles" [CVPR 2021]
 
+### Disclaimer
+
+This project heavly relies on two papers:
+* Data and Training Decisions: "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles"
+* Code: "VirTex: Learning Visual Representations from Textual Annotations"
+
+Both of them were published in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. **Neither of these papers is my own work.**
+
 ### Acknowledgments
 
 This project was made as part of the CDT (PhD) in Health Data Science.
