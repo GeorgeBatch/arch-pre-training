@@ -1,4 +1,4 @@
-# Training VirTex on ARCH dataset
+# Training VirTex models on ARCH dataset
 
 ## Data Exploration (Dataset Changed!)
 
@@ -10,6 +10,21 @@ The dataset available on the web is smaller than the one described in the paper.
 I decided to recompute the statistics of the dataset.
 See `./arch/1-ARCH-Data-Exploration.ipnb` for implementation.
 
+### Downloading the Dataset
+
+The dataset should be placed into `./datasets/ARCH/`
+
+You can download the 2 parts of the ARCH dataset (`books_set` and `pubmed_set`) from from https://warwick.ac.uk/fac/cross_fac/tia/data/arch.
+
+
+Alternatively, you can do it from the command line. The script uses `wget` to download the dataset, `unzip` to inflate the `.zip` files, deletes the `__MACOSX` folders and `.zip` archives.
+
+```{shell}
+cd ./arch/
+bash 0-download-arch.sh
+```
+
+
 ### Books Set
 
 Some images from the `books_set` may contain letters on top. This letters are there to understand which part of the caption refers to which the image when multiple images correspond to one caption.
@@ -17,6 +32,8 @@ Some images from the `books_set` may contain letters on top. This letters are th
 * Total Images (`./datasets/ARCH/books_set/images/`): 4270
 * Total Caption Rows (`./datasets/ARCH/books_set/captions.json`): 4305
 * **Captions with missing images**: 35
+
+All of the images in the `./datasets/ARCH/books_set/images/` directory have a corresponding caption, but not all captions have a corresponding image.
 
 **This table was computed from captions.json:**
 
