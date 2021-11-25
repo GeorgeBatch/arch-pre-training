@@ -87,7 +87,7 @@ Bag Size | # Bags
 8        | 2
 9        | 2
 
-`# Bags` is calculated using figure ids, not captions - not sure if it's the right way.
+`# Bags` is calculated using `figure_id` field, not `caption` field - not sure if it's the right way.
 
 * Total unique captions: 3241
 * Total unique figure_ids: 3321
@@ -106,7 +106,7 @@ Bag Size | # Bags | Difference
 8        | 2      |
 9        | 2      |
 
-`# Bags` is calculated using figure ids, not captions - not sure if it's the right way.
+`# Bags` is calculated using `figure_id` field, not `caption` field - not sure if it's the right way.
 
 
 Total difference is 35 = 32x1 + 1x3 images.
