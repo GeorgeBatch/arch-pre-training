@@ -52,3 +52,7 @@ checkpoints/
 virtex/utils/assets/
 !virtex/data/datasets/
 virtex/model_zoo/configs
+
+# MacOS graphics
+.DS_Store
+*/.DS_Store
