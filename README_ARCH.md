@@ -59,13 +59,15 @@ Note
 Pretraining Task Ablations (1), Transformer Size Ablations (3 and 5) and Backbone Ablations (1) are all the same exact model.
 ```
 
-## Data Exploration
+## Data Exploration (Dataset Changed!)
 
-From original paper:
+From the original paper:
 "ARCH contains 11,816 bags and 15,164 images in total.
 Figure 4c shows a more detailed breakdown by the number of bags according to the number of images within the bag, with the smallest bag size being 1 (9,772 samples) and the largest bag size being 9 for which we have only 7 samples."
 
-See `./arch/1-ARCH-Data-Exploration.ipnb` for details.
+The dataset available on the web is smaller than the one described in the paper.
+I decided to recompute the statistics of the dataset.
+See `./arch/1-ARCH-Data-Exploration.ipnb` for implementation.
 
 ### Books Set
 
@@ -73,7 +75,7 @@ See `./arch/1-ARCH-Data-Exploration.ipnb` for details.
 * Total Caption Rows (`./datasets/ARCH/books_set/captions.json`): 4305
 * **Captions with missing images**: 35
 
-**This table was computed from captions data frame:**
+**This table was computed from captions.json:**
 
 Bag Size | # Bags
 -------- | ------
@@ -133,6 +135,8 @@ Bag Size | # Bags
 
 * Total unique captions: 3285 = 3270 + 11 + 2 + 0 + 1 + 1
 
+**Captions are not split into different images. There are no "A", "B", "C" parts in a caption. There are also no "A", "B", "C" labels on images. This means that images with the same caption can be put in a bag with the caption, but also can probably be given to the model one by one.**
+
 ### Together (only counting when images are available)
 
 Bag Size | # Bags
@@ -179,7 +183,3 @@ TODO: understand which changes need to be made to the config file.
 * Fast Food Transform
 * ? CLAM-slyle (not all of the layers)
 * BatchNorm at the Input
-
-###
-
-2.
