@@ -118,7 +118,7 @@ TODO: understand which changes need to be made to the config file.
 
 "For all MIC model training experiments, we set the hyper-paremeters, tokenization and training details according to Desai et al. [12] and their publicly available code, with a few exceptions as follows: H is set to 512, which also determines the width of each of the transformer layers and the number of attention heads; the batch size is set to 32 images or less irrespective of the bag sizes due to computational restraints, which are pre-computed before every epoch after re-shuffling the dataset indices. Finally, for the ease of training, we switched to a ADAM optimizer with a default learning rate of 1e-3 and an early stopping set to a patience of a held-out set validation loss of 10."
 
-"For all of our MIC, MTL and MTL+MIC models, we employ standard data augmentations using imaug: custom random crop function such that letters are not cropped out); resize and re-scale; color jitter (brightness, contrast satura- tion and hue); Gaussian and/or salt and pepper noise, and JPEG compression artifacts."
+"For all of our MIC, MTL and MTL+MIC models, we employ standard data augmentations using [imaug](https://imgaug.readthedocs.io/en/latest/): custom random crop function such that letters are not cropped out); resize and re-scale; color jitter (brightness, contrast saturation and hue); Gaussian and/or salt and pepper noise, and JPEG compression artifacts."
 
 * resnet50 -> resnet18
 * Fast Food Transform
