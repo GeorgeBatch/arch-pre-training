@@ -76,7 +76,13 @@ Total difference is 35 = 32x1 + 1x3 images.
 * Total unique captions: 3210
 * Total unique figure ids: 3288
 
-TODO: understand why there is no 1-to-1 correspondence between captions and figure ids.
+**Note: there is a difference of 78. Why can it be?**
+
+* For each of the figure ids, there is always a single caption.
+
+* However, the converse does not hold. There are 77 captions, which correspond to 2 (76 captions) or more (1 caption has 3 ids: ['4122', '4122', '4123', '4123', '4124']) different ids. In total, this gives a total difference between the number of unique captions and unique figure ids of **78**=76\*(2-1)+1\*(3-1). So the difference of **78=3288-3210** is explained by it.
+
+TODO: understand if this is a mistake or it's ok.
 
 ### PubMed Set
 
