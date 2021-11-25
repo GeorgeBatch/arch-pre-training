@@ -8,6 +8,10 @@ This project heavly relies on two papers:
 
 Both of them were published in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. **Neither of these papers is my own work.**
 
+### Data Exploration and Changes
+
+[README_ARCH.md](README_ARCH.md) contains the information about the ARCH dataset available on the web (changed from the version described in the paper). It also explains the changes made to the VirTex code in order to pre-train ResNet-18 on the ARCH dataset.
+
 ### Acknowledgments
 
 This project was made as part of the CDT (PhD) in Health Data Science.
