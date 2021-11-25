@@ -12,6 +12,8 @@ See `./arch/1-ARCH-Data-Exploration.ipnb` for implementation.
 
 ### Books Set
 
+Some images from the `books_set` may contain letters on top. This letters are there to understand which part of the caption refers to which the image when multiple images correspond to one caption.
+
 * Total Images (`./datasets/ARCH/books_set/images/`): 4270
 * Total Caption Rows (`./datasets/ARCH/books_set/captions.json`): 4305
 * **Captions with missing images**: 35
