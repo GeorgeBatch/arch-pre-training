@@ -65,7 +65,90 @@ From original paper:
 "ARCH contains 11,816 bags and 15,164 images in total.
 Figure 4c shows a more detailed breakdown by the number of bags according to the number of images within the bag, with the smallest bag size being 1 (9,772 samples) and the largest bag size being 9 for which we have only 7 samples."
 
-TODO: These numbers need to be recomputed.
+See `./arch/1-ARCH-Data-Exploration.ipnb` for details.
+
+### Books Set
+
+* Total Images (`./datasets/ARCH/books_set/images/`): 4270
+* Total Caption Rows (`./datasets/ARCH/books_set/captions.json`): 4305
+* **Captions with missing images**: 35
+
+**This table was computed from captions data frame:**
+
+Bag Size | # Bags
+-------- | ------
+1        | 2720   
+2        | 378
+3        | 133
+4        | 56
+5        | 12
+6        | 14
+7        | 4
+8        | 2
+9        | 2
+
+`# Bags` is calculated using figure ids, not captions - not sure if it's the right way.
+
+* Total unique captions: 3241
+* Total unique figure_ids: 3321
+
+**Due to the missing images, the values need to be recomputed.**
+
+Bag Size | # Bags | Difference
+-------- | ------ | ---------
+1        | 2688   | 32
+2        | 378    |
+3        | 132    | 1
+4        | 56     |
+5        | 12     |
+6        | 14     |
+7        | 4      |
+8        | 2      |
+9        | 2      |
+
+`# Bags` is calculated using figure ids, not captions - not sure if it's the right way.
+
+
+Total difference is 35 = 32x1 + 1x3 images.
+
+* Total unique captions: 3210
+* Total unique figure ids: 3288
+
+TODO: understand why there is no 1-to-1 correspondence between captions and figure ids.
+
+### PubMed Set
+
+* Total Images (`./datasets/ARCH/pubmed_set/images/`): 3309
+* Total Caption Rows (`./datasets/ARCH/pubmed_set/captions.json`): 3309
+* Captions with missing images: 0
+
+Bag Size | # Bags
+-------- | ------
+1        | 3270
+2        | 11
+3        | 2
+4        | 0
+5        | 1
+6        | 1
+
+* Total unique captions: 3285 = 3270 + 11 + 2 + 0 + 1 + 1
+
+### Together (only counting when images are available)
+
+Bag Size | # Bags
+-------- | ------
+1        | 5958   
+2        | 389
+3        | 134
+4        | 56
+5        | 13
+6        | 15
+7        | 4
+8        | 2
+9        | 2
+
+* Total Images (`./datasets/ARCH/*/images/`): 7579 = 3309 + 4270
+* Total Captions
 
 
 ## Libraries used in the ARCH paper
