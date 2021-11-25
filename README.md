@@ -3,8 +3,8 @@
 ### Disclaimer
 
 This project heavly relies on two papers:
-* **For Data and Training Decisions:** "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles"
-* **For Code:** "VirTex: Learning Visual Representations from Textual Annotations"
+* **For Data and Training Decisions:** "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles" [[CVPR'21 link](https://openaccess.thecvf.com/content/CVPR2021/html/Gamper_Multiple_Instance_Captioning_Learning_Representations_From_Histopathology_Textbooks_and_Articles_CVPR_2021_paper.html)]
+* **For Code:** "VirTex: Learning Visual Representations from Textual Annotations" [[CVPR'21 link](https://openaccess.thecvf.com/content/CVPR2021/html/Desai_VirTex_Learning_Visual_Representations_From_Textual_Annotations_CVPR_2021_paper.html)]
 
 Both of them were published in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. **Neither of these papers is my own work.**
 
