@@ -35,6 +35,7 @@ MANIFEST
 # Datasets and preprocessed files
 data/
 !virtex/data
+!virtex/data/datasets/arch_captions.py
 
 # IPython Notebook
 .ipynb_checkpoints
