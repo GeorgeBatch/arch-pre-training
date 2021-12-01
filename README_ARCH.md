@@ -71,7 +71,7 @@ Bag Size | # Bags | Difference
 `# Bags` is calculated using `figure_id` field, not `caption` field - not sure if it's the right way.
 
 
-Total difference is 35 = 32x1 + 1x3 images.
+Total difference is 35 = 32\*1 + 1\*3 images.
 
 * Total unique captions: 3210
 * Total unique figure ids: 3288
@@ -90,6 +90,10 @@ TODO: understand if this is a mistake or it's ok.
 * Total Caption Rows (`./datasets/ARCH/pubmed_set/captions.json`): 3309
 * Captions with missing images: 0
 
+* Total Unique Captions: 3285
+* Total Unique uuids: 3309
+* 24 "extra captions"
+
 Bag Size | # Bags
 -------- | ------
 1        | 3270
@@ -102,6 +106,10 @@ Bag Size | # Bags
 * Total unique captions: 3285 = 3270 + 11 + 2 + 0 + 1 + 1
 
 **Captions are not split into different images. There are no "A", "B", "C" parts in a caption. There are also no "A", "B", "C" labels on images. This means that images with the same caption can be put in a bag with the caption, but also can probably be given to the model one by one.**
+
+There are 15 = 11 + 2 + 0 + 1 + 1 captions with more than 1 uuid. In total, there are 24 = 11\*(2-1) + 2\*(3-1) + 0\*(4-1) + 1\*(5-1) + 1\*(6-1) = 11 + 4 + 0 + 4 + 5 extra captions.
+
+**TODO: Ask Jev Gamper how they dealt with them. Did they put them in a batch?**
 
 ### Together (only counting when images are available)
 
