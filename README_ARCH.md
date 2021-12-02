@@ -82,11 +82,43 @@ Total difference is 35 = 32\*1 + 1\*3 images.
 
 * However, the converse does not hold. There are 77 captions, which correspond to 2 (76 captions) or more (1 caption has 3 ids: ['4122', '4122', '4123', '4123', '4124']) different ids. In total, this gives a total difference between the number of unique captions and unique figure ids of **78**=76\*(2-1)+1\*(3-1). So the difference of **78=3288-3210** is explained by it.
 
-TODO: understand if this is a mistake or it's ok.
+TODO: understand if this is a mistake or it's ok. Emailed Jev Gamper (author).
+
+**Calculating the number of bags using `caption`.**
+
+**With missing images**
+
+Bag Size | # Bags | Difference
+-------- | ------ | ---------
+1        | 2575   |
+2        | 438    |
+3        | 133    |
+4        | 57     |
+5        | 15     |
+6        | 15     |
+7        | 4      |
+8        | 2      |
+9        | 2      |
+
+**Without missing images**
+
+Bag Size | # Bags | Difference
+-------- | ------ | ---------
+1        | 2546   | 29
+2        | 438    |
+3        | 131    | 2
+4        | 57     |
+5        | 15     |
+6        | 15     |
+7        | 4      |
+8        | 2      |
+9        | 2      |
+
+Total difference is 35 = 29\*1 + 2\*3 images (same as when counting using `figure_id`).
 
 ### PubMed Set
 
-* Total Images (`./datasets/ARCH/pubmed_set/images/`): 3309
+* Total Images (`./datasets/ARCH/pubmed_set/images/`): 3309 **(3272 jpg, 37 png)**
 * Total Caption Rows (`./datasets/ARCH/pubmed_set/captions.json`): 3309
 * Captions with missing images: 0
 
