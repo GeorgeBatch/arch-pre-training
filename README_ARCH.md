@@ -1,16 +1,6 @@
 # Training VirTex models on ARCH dataset
 
-## Data Exploration (Dataset Changed!)
-
-From the original paper:
-"ARCH contains 11,816 bags and 15,164 images in total.
-Figure 4c shows a more detailed breakdown by the number of bags according to the number of images within the bag, with the smallest bag size being 1 (9,772 samples) and the largest bag size being 9 for which we have only 7 samples."
-
-The dataset available on the web is smaller than the one described in the paper.
-I decided to recompute the statistics of the dataset.
-See `./arch/1-ARCH-Data-Exploration.ipnb` for implementation.
-
-### Downloading the Dataset
+## Download the Dataset
 
 The dataset should be placed into `./datasets/ARCH/`
 
@@ -23,6 +13,20 @@ Alternatively, you can do it from the command line. The script uses `wget` to do
 cd ./arch/
 bash 0-download-arch.sh
 ```
+
+## Data Exploration (Dataset Changed!)
+
+**Code:**
+* [arch/1-ARCH-Data-Exploration.ipynb](arch/1-ARCH-Data-Exploration.ipynb)
+
+
+From the original paper:
+"ARCH contains 11,816 bags and 15,164 images in total.
+Figure 4c shows a more detailed breakdown by the number of bags according to the number of images within the bag, with the smallest bag size being 1 (9,772 samples) and the largest bag size being 9 for which we have only 7 samples."
+
+The dataset available on the web is smaller than the one described in the paper.
+I decided to recompute the statistics of the dataset.
+See `./arch/1-ARCH-Data-Exploration.ipnb` for implementation.
 
 
 ### Books Set
@@ -161,6 +165,59 @@ Bag Size | # Bags
 * Total Captions
 
 
+
+
+## Creating annotation files
+
+**Code:**
+* [arch/2-ARCH-All-Annotations-In-One-File.ipynb](arch/2-ARCH-All-Annotations-In-One-File.ipynb)
+* [arch/3-ARCH-Train-Val-Split.ipynb](arch/3-ARCH-Train-Val-Split.ipynb)
+
+
+Run all cells in both notebooks to create the annotation files:
+* [datasets/ARCH/annotations/captions_all.json](datasets/ARCH/annotations/captions_all.json)
+* [datasets/ARCH/annotations/captions_train.json](datasets/ARCH/annotations/captions_train.json)
+* [datasets/ARCH/annotations/captions_val.json](datasets/ARCH/annotations/captions_val.json)
+
+The original annotation files provided with the dataset included references to some 35 non-existent images. They were also not suitable for the dataset classes from VirTex. The original annotation files can be found here:
+* [datasets/ARCH/books_set/captions.json](datasets/ARCH/books_set/captions.json)
+* [datasets/ARCH/pubmed_set/captions.json](datasets/ARCH/pubmed_set/captions.json)
+
+
+The annotation files created preserve the `figure_id` and `letter` columns from the `books_set`. For the instances from the `pubmed_set`, these columns are set to `None`.
+
+
+## Creating Dataset Classes
+
+**VirTex Code:**
+* `virtex/data/coco_captionins.py` provides a "PyTorch dataset to read COCO Captions dataset and provide it completely unprocessed" (`CocoCaptionsDataset`). It needs to be changed to account for the differences between the COCO and the ARCH datasets. COCO has one of more captions per image, while ARCH has a single caption per one or more images. The directory structure is also different.
+* `virtex/data/captioning.py` provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
+  1. The caption selected at random
+  2. Text tokenization
+  3. Paired Image-Caption Augmentations to be used
+  4. Collate function to put the items into batches
+
+
+**ARCH Code:**
+* A class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw` is tested and created and tested in [`arch/4-ARCH-Dataset-Class-Raw.ipynb`](arch/4-ARCH-Dataset-Class-Raw.ipynb)
+* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` is created in `arch/5-ARCH-Dataset-Class-Extended.ipynb`.
+
+## Building Vocabulary
+
+**Code:**
+* [`scripts/build_vocabulary_arch.py`](scripts/build_vocabulary_arch.py) is an adapted version of the original [`scripts/build_vocabulary.py`](scripts/build_vocabulary.py) file from VirTex. The only differences there are to accommodate the differences between the structures of the annotation files and multiple occurrences of captions.
+
+**Duplicate captions are removed before passing the list of captions to the tokenizer since for each bag of images its caption is presented only once.**
+
+Following J. Gamper *et al.*, all other parameters are kept as defaults from VirTex.
+
+**Run from the root directory:**
+```
+mkdir datasets/vocab/
+python scripts/build_vocabulary_arch.py
+```
+
+
 ## Libraries used in the ARCH paper
 
 * Extracting images and captions from pubmed: https://github.com/titipata/pubmed_parser
@@ -189,6 +246,7 @@ TODO: understand which changes need to be made to the config file.
 * Fast Food Transform
 * ? CLAM-slyle (not all of the layers)
 * BatchNorm at the Input
+
 
 
 ## Instructions from VirTex webpage
