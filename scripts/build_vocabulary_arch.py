@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser(
     """
 )
 parser.add_argument(
-    "-c", "--captions", default="datasets/arch/annotations/captions_arch_train.json",
+    "-c", "--captions", default="datasets/ARCH/annotations/captions_train.json",
     help="Path to caption annotations file in ARCH format.",
 )
 parser.add_argument(
@@ -53,8 +53,11 @@ def _read_captions(annotations_path: str) -> List[str]:
     _annotations = json.load(open(annotations_path))
 
     captions: List[str] = []
-    for ann in _annotations["annotations"]:
+    for idx, ann in _annotations.items():
         captions.append(ann["caption"])
+
+    # remove duplicate captions
+    captions = list(set(captions))
 
     return captions
 
