@@ -49,6 +49,10 @@ scripts/test_*
 
 # Data (symlinks) directory, model checkpoints, tensorboard logs etc.
 datasets/
+!datasets/ARCH/annotations
+!datasets/ARCH/books_set/captions.json
+!datasets/ARCH/pubmed_set/captions.json
+
 checkpoints/
 virtex/utils/assets/
 !virtex/data/datasets/
