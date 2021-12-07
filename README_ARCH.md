@@ -189,7 +189,7 @@ The annotation files created preserve the `figure_id` and `letter` columns from 
 
 ## Creating Dataset Classes
 
-**VirTex Code:**
+**VirTex Code (original)**
 * [virtex/data/datasets/coco_captions.py](virtex/data/datasets/coco_captions.py) provides a "PyTorch dataset to read COCO Captions dataset and provide it completely unprocessed" (`CocoCaptionsDataset`). It needs to be changed to account for the differences between the COCO and the ARCH datasets. COCO has one of more captions per image, while ARCH has a single caption per one or more images. The directory structure is also different.
 * [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
   1. The caption selected at random
@@ -198,9 +198,9 @@ The annotation files created preserve the `figure_id` and `letter` columns from 
   4. Collate function to put the items into batches
 
 
-**ARCH Code:**
-* [virtex/data/datasets/arch_captions.py](virtex/data/datasets/arch_captions.py) contains my class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw`. It was created and tested in [`arch/4-ARCH-Dataset-Class-Raw.ipynb`](arch/4-ARCH-Dataset-Class-Raw.ipynb).
-* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` was created and tested in `arch/5-ARCH-Dataset-Class-Extended.ipynb`.
+**ARCH Code (extended by me)**
+* [virtex/data/datasets/arch_captions.py](virtex/data/datasets/arch_captions.py) contains my class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw`. It was created and tested in [arch/4-ARCH-Dataset-Class-Raw.ipynb](arch/4-ARCH-Dataset-Class-Raw.ipynb).
+* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` was created and tested in [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb).
 
 ## Building Vocabulary
 
