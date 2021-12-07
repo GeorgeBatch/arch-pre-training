@@ -199,7 +199,7 @@ The annotation files created preserve the `figure_id` and `letter` columns from 
 
 
 **ARCH Code:**
-* A class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw` was created and tested in [`arch/4-ARCH-Dataset-Class-Raw.ipynb`](arch/4-ARCH-Dataset-Class-Raw.ipynb). It is saved in [virtex/data/datasets/arch_captionins.py](virtex/data/datasets/arch_captionins.py).
+* [virtex/data/datasets/arch_captions.py](virtex/data/datasets/arch_captions.py) contains my class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw`. It was created and tested in [`arch/4-ARCH-Dataset-Class-Raw.ipynb`](arch/4-ARCH-Dataset-Class-Raw.ipynb).
 * Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` was created and tested in `arch/5-ARCH-Dataset-Class-Extended.ipynb`.
 
 ## Building Vocabulary
