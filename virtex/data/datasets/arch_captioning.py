@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 
 from virtex.data.tokenizers import SentencePieceBPETokenizer
 from virtex.data import transforms as T
-from .coco_captions import CocoCaptionsDataset
+from .coco_captions import ArchCaptionsDatasetRaw
 
 
 class CaptioningDataset(Dataset):
