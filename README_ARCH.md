@@ -199,13 +199,13 @@ The annotation files created preserve the `figure_id` and `letter` columns from 
 
 
 **ARCH Code (extended by me)**
-* [virtex/data/datasets/arch_captions.py](virtex/data/datasets/arch_captions.py) contains my class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw`. It was created and tested in [arch/4-ARCH-Dataset-Class-Raw.ipynb](arch/4-ARCH-Dataset-Class-Raw.ipynb).
-* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` was created and tested in [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb).
+* [virtex/data/datasets/arch_captions.py](virtex/data/datasets/arch_captions.py) contains my class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw`. [arch/4-ARCH-Dataset-Class-Raw.ipynb](arch/4-ARCH-Dataset-Class-Raw.ipynb) shows examples of its basic usage.
+* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended`. [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb) shows examples of its basic usage.
 
 ## Building Vocabulary
 
 **Code:**
-* [`scripts/build_vocabulary_arch.py`](scripts/build_vocabulary_arch.py) is an adapted version of the original [`scripts/build_vocabulary.py`](scripts/build_vocabulary.py) file from VirTex. The only differences there are to accommodate the differences between the structures of the annotation files and multiple occurrences of captions.
+* [scripts/build_vocabulary_arch.py](scripts/build_vocabulary_arch.py) is an adapted version of the original [scripts/build_vocabulary.py](scripts/build_vocabulary.py) file from VirTex. The only differences there are to accommodate the differences between the structures of the annotation files and multiple occurrences of captions.
 
 **Duplicate captions are removed before passing the list of captions to the tokenizer since for each bag of images its caption is presented only once.**
 
