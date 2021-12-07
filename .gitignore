@@ -33,8 +33,6 @@ MANIFEST
 .mypy_cache
 
 # Datasets and preprocessed files
-data/
-!virtex/data
 !virtex/data/datasets/arch_captions.py
 
 # IPython Notebook
@@ -47,13 +45,23 @@ ENV/
 # Temporary scripts to (smoke) test out bits and pieces of code.
 scripts/test_*
 
+
+# -----------------------------------------------------------------------------
 # Data (symlinks) directory, model checkpoints, tensorboard logs etc.
-datasets/
-!datasets/ARCH/annotations
-!datasets/ARCH/books_set/captions.json
-!datasets/ARCH/pubmed_set/captions.json
+datasets/*
+!datasets/ARCH/
+
+datasets/ARCH/*
+!datasets/ARCH/annotations/
+!datasets/ARCH/books_set/
+!datasets/ARCH/pubmed_set/
+
+datasets/ARCH/books_set/images
+datasets/ARCH/pubmed_set/images
 
 checkpoints/
+# -----------------------------------------------------------------------------
+
 virtex/utils/assets/
 !virtex/data/datasets/
 virtex/model_zoo/configs
