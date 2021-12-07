@@ -33,6 +33,7 @@ class ArchCaptionsDatasetRaw(Dataset):
         # Collect list of uuids and file paths for each caption
         captions_to_uuids: Dict[str, List[str]] = defaultdict(list)
         captions_to_image_filepaths: Dict[str, List[str]] = defaultdict(list)
+        captions_to_intids: Dict[str, List[int]] = defaultdict(list)
         for idx, ann in captions.items():
             if (source == "both") or (source == ann['source']):
                 # if source="both", then no filtering needed
@@ -41,14 +42,16 @@ class ArchCaptionsDatasetRaw(Dataset):
                 # make a check that the image exist before adding its `uuid` or `path`
                 assert os.path.exists(ann['path']), f"{ann['path']} does not exist!"
 
-                captions_to_uuids[ann['caption']].append(ann['uuid'])
                 captions_to_image_filepaths[ann['caption']].append(ann['path'])
+                # uuid (string); intid (int)
+                captions_to_uuids[ann['caption']].append(ann['uuid'])
+                captions_to_intids[ann['caption']].append(int(idx))
         #print(captions_per_image)
 
         # Keep all annotations in memory. Make a list of tuples, each tuple
         # is ``(list[image_id], list[file_path], captions)``.
         self.instances = [
-            (captions_to_uuids[caption], captions_to_image_filepaths[caption], caption)
+            (captions_to_intids[caption], captions_to_image_filepaths[caption], caption)
             for caption in captions_to_image_filepaths.keys()
         ]
 
