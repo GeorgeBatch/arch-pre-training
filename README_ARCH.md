@@ -190,8 +190,8 @@ The annotation files created preserve the `figure_id` and `letter` columns from 
 ## Creating Dataset Classes
 
 **VirTex Code:**
-* `virtex/data/coco_captionins.py` provides a "PyTorch dataset to read COCO Captions dataset and provide it completely unprocessed" (`CocoCaptionsDataset`). It needs to be changed to account for the differences between the COCO and the ARCH datasets. COCO has one of more captions per image, while ARCH has a single caption per one or more images. The directory structure is also different.
-* `virtex/data/captioning.py` provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
+* [virtex/data/datasets/coco_captionins.py](virtex/data/datasets/coco_captionins.py) provides a "PyTorch dataset to read COCO Captions dataset and provide it completely unprocessed" (`CocoCaptionsDataset`). It needs to be changed to account for the differences between the COCO and the ARCH datasets. COCO has one of more captions per image, while ARCH has a single caption per one or more images. The directory structure is also different.
+* [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
   1. The caption selected at random
   2. Text tokenization
   3. Paired Image-Caption Augmentations to be used
@@ -199,8 +199,8 @@ The annotation files created preserve the `figure_id` and `letter` columns from 
 
 
 **ARCH Code:**
-* A class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw` is tested and created and tested in [`arch/4-ARCH-Dataset-Class-Raw.ipynb`](arch/4-ARCH-Dataset-Class-Raw.ipynb)
-* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` is created in `arch/5-ARCH-Dataset-Class-Extended.ipynb`.
+* A class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw` was created and tested in [`arch/4-ARCH-Dataset-Class-Raw.ipynb`](arch/4-ARCH-Dataset-Class-Raw.ipynb). It is saved in [virtex/data/datasets/arch_captionins.py](virtex/data/datasets/arch_captionins.py).
+* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended` was created and tested in `arch/5-ARCH-Dataset-Class-Extended.ipynb`.
 
 ## Building Vocabulary
 
