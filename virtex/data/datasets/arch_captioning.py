@@ -11,15 +11,17 @@ from virtex.data import transforms as T
 from .coco_captions import ArchCaptionsDatasetRaw
 
 
-class CaptioningDataset(Dataset):
+class ArchCaptioningDatasetExtended(Dataset):
     r"""
     A dataset which provides image-caption (forward and backward) pairs from
-    a COCO Captions annotation file. This is used for pretraining tasks which
+    a ARCH Captions annotation file. This is used for pretraining tasks which
     use captions - bicaptioning, forward captioning and token classification.
 
     Args:
         data_root: Path to dataset directory containing images and annotations.
-        split: Name of COCO 2017 split to read. One of ``{"train", "val"}``.
+        source: Name of ARCH source to read. One of ``{"pubmed", "books", "both"}``.
+            "both" option results in a concatenation of the datasets from "pubmed" and "books"
+        split: Name of ARCH split to read. One of ``{"train", "val", "all"}``.
         tokenizer: Tokenizer which maps word tokens to their integer IDs.
         image_transform: List of image transformations, from either
             `albumentations <https://albumentations.readthedocs.io/en/latest/>`_
@@ -33,10 +35,11 @@ class CaptioningDataset(Dataset):
         data_root: str,
         split: str,
         tokenizer: SentencePieceBPETokenizer,
+        source: str="both",
         image_transform: Callable = T.DEFAULT_IMAGE_TRANSFORM,
         max_caption_length: int = 30,
     ):
-        self._dset = CocoCaptionsDataset(data_root, split)
+        self._dset = ArchCaptionsDatasetRaw(data_root=data_root, source=source, split=split)
         self.image_transform = image_transform
         self.caption_transform = alb.Compose(
             [
@@ -54,24 +57,37 @@ class CaptioningDataset(Dataset):
 
         # keys: {"image_id", "image", "captions"}
         instance = self._dset[idx]
-        image_id, image, captions = (
-            instance["image_id"],
-            instance["image"],
-            instance["captions"],
+        image_ids, images, caption = (
+            instance["image_ids"],
+            instance["images"],
+            instance["caption"],
         )
-        caption = random.choice(captions)
 
-        # Transform image-caption pair and convert image from HWC to CHW format.
+        # List[int] -> np.array of shape (len(image_ids), )
+        image_ids = np.array(image_ids)
+        # (len(image_ids), ) -> (len(image_ids), 1)
+        image_ids = image_ids.reshape((image_ids.shape[0], 1))
+
+        # Transform image-caption pairs.
+        #    All images need to be resized to the same size to put them into a tensor.
         # Pass in caption to image_transform due to paired horizontal flip.
         # Caption won't be tokenized/processed here.
-        image_caption = self.image_transform(image=image, caption=caption)
-        image, caption = image_caption["image"], image_caption["caption"]
-        image = np.transpose(image, (2, 0, 1))
+        image_caption_pairs = [self.image_transform(image=image, caption=caption) for image in images]
 
-        caption_tokens = self.caption_transform(caption=caption)["caption"]
+        # split images and captions
+        images = [image_caption["image"] for image_caption in image_caption_pairs]
+        captions = [image_caption["caption"] for image_caption in image_caption_pairs]
+        assert all([captions[0] == captions[i] for i in range(len(captions))]), \
+            "The same transformation should be performed on all images in a bag => single version of the caption should appear"
+        caption_tokens = self.caption_transform(caption=captions[0])["caption"]
+
+        # Convert each image from HWC to CHW format.
+        images = [np.transpose(image, (2, 0, 1)) for image in images] # [(Channel, Height, Width), ..., ] Bag Size times
+        images = [torch.tensor(image, dtype=torch.float) for image in images]
+
         return {
-            "image_id": torch.tensor(image_id, dtype=torch.long),
-            "image": torch.tensor(image, dtype=torch.float),
+            "image_ids": torch.tensor(image_ids, dtype=torch.long), # ((Bag size, 1)
+            "images": torch.stack(images, dim=0), # (Bag size, Channel, Height, Width)
             "caption_tokens": torch.tensor(caption_tokens, dtype=torch.long),
             "noitpac_tokens": torch.tensor(caption_tokens, dtype=torch.long).flip(0),
             "caption_lengths": torch.tensor(len(caption_tokens), dtype=torch.long),
@@ -93,8 +109,8 @@ class CaptioningDataset(Dataset):
             padding_value=self.padding_idx,
         )
         return {
-            "image_id": torch.stack([d["image_id"] for d in data], dim=0),
-            "image": torch.stack([d["image"] for d in data], dim=0),
+            "image_id": torch.stack([d["image_ids"] for d in data], dim=0),
+            "image": torch.stack([d["images"] for d in data], dim=0),
             "caption_tokens": caption_tokens,
             "noitpac_tokens": noitpac_tokens,
             "caption_lengths": torch.stack([d["caption_lengths"] for d in data]),
