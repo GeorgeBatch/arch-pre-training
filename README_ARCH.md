@@ -16,156 +16,37 @@ bash 0-download-arch.sh
 
 ## Data Exploration (Dataset Changed!)
 
+**Annotation files:**
+* Books Set: ([datasets/ARCH/books_set/captions.json](datasets/ARCH/books_set/captions.json))
+* PubMed Set: ([datasets/ARCH/books_set/captions.json](datasets/ARCH/books_set/captions.json))
+
 **Code:**
-* [arch/1-ARCH-Data-Exploration.ipynb](arch/1-ARCH-Data-Exploration.ipynb)
+* [arch/1-ARCH-Data-Exploration.ipynb](arch/1-ARCH-Data-Exploration.ipynb) contains my code for data exploration
 
-
-From the original paper:
+**From the original paper:**
 "ARCH contains 11,816 bags and 15,164 images in total.
 Figure 4c shows a more detailed breakdown by the number of bags according to the number of images within the bag, with the smallest bag size being 1 (9,772 samples) and the largest bag size being 9 for which we have only 7 samples."
 
+**Changes:**
 The dataset available on the web is smaller than the one described in the paper.
 I decided to recompute the statistics of the dataset.
-See `./arch/1-ARCH-Data-Exploration.ipnb` for implementation.
+See [arch/1-ARCH-Data-Exploration.ipnb](arch/1-ARCH-Data-Exploration.ipynb) for .
 
+**Summary:**
+* Total Images. Books: 4270 `.png` images; PubMed: 3309 (3272 `.jpg`, 37 `.png`) images. Total: 7579 images.
+* Books set annotation file contains 35 captions w/o images; Pubmed captions ([datasets/ARCH/pubmed_set/captions.json](datasets/ARCH/pubmed_set/captions.json)) map one-to-one to the downloaded images.
+* Books set has 2 ways of groupping images into bags. By `figure_id` and by `caption` fields of its annotation file. Pubmed set does not have the `figure_id` field so images are groupped into bags using capitons.
+* Books set annotation file contains 76 captions that correspond to 2 figure ids and 1 caption corresponds to 3 figure ids. This means that there are 78 more unique figure ids than captions. **This is suspected to be a mistake and should be addressed.**
 
-### Books Set
+**Decisions:**
+* Ignored the entries of the annotation files with missing images.
+* Parsed the file extensions on the fly in the dataset classes.
 
-Some images from the `books_set` may contain letters on top. This letters are there to understand which part of the caption refers to which the image when multiple images correspond to one caption.
+**TODO:**
+* Decide what to do with captions corresponding to multiple figures in the Books Set.
 
-* Total Images (`./datasets/ARCH/books_set/images/`): 4270
-* Total Caption Rows (`./datasets/ARCH/books_set/captions.json`): 4305
-* **Captions with missing images**: 35
-
-All of the images in the `./datasets/ARCH/books_set/images/` directory have a corresponding caption, but not all captions have a corresponding image.
-
-**This table was computed from captions.json:**
-
-Bag Size | # Bags
--------- | ------
-1        | 2720   
-2        | 378
-3        | 133
-4        | 56
-5        | 12
-6        | 14
-7        | 4
-8        | 2
-9        | 2
-
-`# Bags` is calculated using `figure_id` field, not `caption` field - not sure if it's the right way.
-
-* Total unique captions: 3241
-* Total unique figure_ids: 3321
-
-**Due to the missing images, the values need to be recomputed.**
-
-Bag Size | # Bags | Difference
--------- | ------ | ---------
-1        | 2688   | 32
-2        | 378    |
-3        | 132    | 1
-4        | 56     |
-5        | 12     |
-6        | 14     |
-7        | 4      |
-8        | 2      |
-9        | 2      |
-
-`# Bags` is calculated using `figure_id` field, not `caption` field - not sure if it's the right way.
-
-
-Total difference is 35 = 32\*1 + 1\*3 images.
-
-* Total unique captions: 3210
-* Total unique figure ids: 3288
-
-**Note: there is a difference of 78. Why can it be?**
-
-* For each of the figure ids, there is always a single caption.
-
-* However, the converse does not hold. There are 77 captions, which correspond to 2 (76 captions) or more (1 caption has 3 ids: ['4122', '4122', '4123', '4123', '4124']) different ids. In total, this gives a total difference between the number of unique captions and unique figure ids of **78**=76\*(2-1)+1\*(3-1). So the difference of **78=3288-3210** is explained by it.
-
-TODO: understand if this is a mistake or it's ok. Emailed Jev Gamper (author).
-
-**Calculating the number of bags using `caption`.**
-
-**With missing images**
-
-Bag Size | # Bags | Difference
--------- | ------ | ---------
-1        | 2575   |
-2        | 438    |
-3        | 133    |
-4        | 57     |
-5        | 15     |
-6        | 15     |
-7        | 4      |
-8        | 2      |
-9        | 2      |
-
-**Without missing images**
-
-Bag Size | # Bags | Difference
--------- | ------ | ---------
-1        | 2546   | 29
-2        | 438    |
-3        | 131    | 2
-4        | 57     |
-5        | 15     |
-6        | 15     |
-7        | 4      |
-8        | 2      |
-9        | 2      |
-
-Total difference is 35 = 29\*1 + 2\*3 images (same as when counting using `figure_id`).
-
-### PubMed Set
-
-* Total Images (`./datasets/ARCH/pubmed_set/images/`): 3309 **(3272 jpg, 37 png)**
-* Total Caption Rows (`./datasets/ARCH/pubmed_set/captions.json`): 3309
-* Captions with missing images: 0
-
-* Total Unique Captions: 3285
-* Total Unique uuids: 3309
-* 24 "extra captions"
-
-Bag Size | # Bags
--------- | ------
-1        | 3270
-2        | 11
-3        | 2
-4        | 0
-5        | 1
-6        | 1
-
-* Total unique captions: 3285 = 3270 + 11 + 2 + 0 + 1 + 1
-
-**Captions are not split into different images. There are no "A", "B", "C" parts in a caption. There are also no "A", "B", "C" labels on images. This means that images with the same caption can be put in a bag with the caption, but also can probably be given to the model one by one.**
-
-There are 15 = 11 + 2 + 0 + 1 + 1 captions with more than 1 uuid. In total, there are 24 = 11\*(2-1) + 2\*(3-1) + 0\*(4-1) + 1\*(5-1) + 1\*(6-1) = 11 + 4 + 0 + 4 + 5 extra captions.
-
-**TODO: Ask Jev Gamper how they dealt with them. Did they put them in a batch?**
-
-### Together (only counting when images are available)
-
-Bag Size | # Bags
--------- | ------
-1        | 5958   
-2        | 389
-3        | 134
-4        | 56
-5        | 13
-6        | 15
-7        | 4
-8        | 2
-9        | 2
-
-* Total Images (`./datasets/ARCH/*/images/`): 7579 = 3309 + 4270
-* Total Captions
-
-
-
+**Full Version:**
+[README_ARCH_DATA.md](README_ARCH_DATA.md) contains everything found during the data exploration
 
 ## Creating annotation files
 
@@ -187,20 +68,13 @@ The original annotation files provided with the dataset included references to s
 The annotation files created preserve the `figure_id` and `letter` columns from the `books_set`. For the instances from the `pubmed_set`, these columns are set to `None`.
 
 
-## Creating Dataset Classes
+## Raw Dataset Class
 
 **VirTex Code (original)**
 * [virtex/data/datasets/coco_captions.py](virtex/data/datasets/coco_captions.py) provides a "PyTorch dataset to read COCO Captions dataset and provide it completely unprocessed" (`CocoCaptionsDataset`). It needs to be changed to account for the differences between the COCO and the ARCH datasets. COCO has one of more captions per image, while ARCH has a single caption per one or more images. The directory structure is also different.
-* [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
-  1. The caption selected at random
-  2. Text tokenization
-  3. Paired Image-Caption Augmentations to be used
-  4. Collate function to put the items into batches
-
 
 **ARCH Code (extended by me)**
 * [virtex/data/datasets/arch_captions.py](virtex/data/datasets/arch_captions.py) contains my class analogous to `CocoCaptionsDataset` called `ArchCaptionsDatasetRaw`. [arch/4-ARCH-Dataset-Class-Raw.ipynb](arch/4-ARCH-Dataset-Class-Raw.ipynb) shows examples of its basic usage.
-* Its extended version analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended`. [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb) shows examples of its basic usage.
 
 ## Building Vocabulary
 
@@ -216,6 +90,29 @@ Following J. Gamper *et al.*, all other parameters are kept as defaults from Vir
 mkdir datasets/vocab/
 python scripts/build_vocabulary_arch.py
 ```
+
+It results in the creation of:
+* `datasets/vocab/arch_10k.model`
+* `datasets/vocab/arch_10k.vocab`
+
+## Extended Dataset Class
+
+**VirTex Code (original)**
+* [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
+  1. The caption selected at random (COCO has multiple captions per image)
+  2. Paired Image-Caption Augmentations to be used (horizontal flip combined with "left" <-> "right" switch)
+  3. Text tokenisation (after augmentations)
+  4. Collate function to put the items into batches
+
+**ARCH Code (extended by me)**
+* [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides the extended version of the Dataset class analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended`. [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb) shows examples of its basic usage. It requires to specify a tokeniser model, e.g. "`datasets/vocab/arch_10k.model"`.
+
+**Differences to the VirTex Code:**
+ARCH has one or more images per caption. **I assume that only all images together will contain enough information to correspond to a caption.** This means that:
+1. There is no need to select a caption at random (only one present anyway)
+2. Images from one bag should be given together as one batch with a single caption as its label.
+3. All transforms (both fixed and random) except for the "flips" can be different for different images in the bag since only the "flips" are connected to the changes in captions. After all transforms are performed, the images should be put in a single tensor of shape (Batch Size = Bag Size, C, Height, Width).
+4. If the flip is performed, it should be the same flip so that the caption is adjusted in the same way.
 
 
 ## Libraries used in the ARCH paper
