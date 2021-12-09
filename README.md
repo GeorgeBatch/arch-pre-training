@@ -3,14 +3,21 @@
 ### Disclaimer
 
 This project heavily relies on two papers:
-* **For Data and Training Decisions:** "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles" [[CVPR'21 link](https://openaccess.thecvf.com/content/CVPR2021/html/Gamper_Multiple_Instance_Captioning_Learning_Representations_From_Histopathology_Textbooks_and_Articles_CVPR_2021_paper.html)]
-* **For Code:** "VirTex: Learning Visual Representations from Textual Annotations" [[CVPR'21 link](https://openaccess.thecvf.com/content/CVPR2021/html/Desai_VirTex_Learning_Visual_Representations_From_Textual_Annotations_CVPR_2021_paper.html)]
+* **For Data and Training Decisions:** "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles" [[CVPR'21 link](gamper2020multiple)]
+* **For Code:** "VirTex: Learning Visual Representations from Textual Annotations" [[CVPR'21 link](virtex2020)]
 
 Both of them were published in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. **Neither of these papers is my own work.**
 
-### Data Exploration and Changes
 
-[README_ARCH.md](README_ARCH.md) contains the information about the ARCH dataset available on the web (changed from the version described in the paper). It also explains the changes made to the VirTex code in order to pre-train ResNet-18 on the ARCH dataset.
+
+[gamper2020multiple]: https://openaccess.thecvf.com/content/CVPR2021/html/Gamper_Multiple_Instance_Captioning_Learning_Representations_From_Histopathology_Textbooks_and_Articles_CVPR_2021_paper.html
+[virtex2020]: https://openaccess.thecvf.com/content/CVPR2021/html/Desai_VirTex_Learning_Visual_Representations_From_Textual_Annotations_CVPR_2021_paper.html
+
+### My Contributions
+
+[README_ARCH.md](README_ARCH.md) describes what I did to reproduce the models from "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles". I used a lot of the existing code from the [VirTex GitHub Repository](https://github.com/kdexd/virtex) and extended their codebase to accommodate for the changed nature of the dataset and annotations.
+
+[README_ARCH_DATA.md](README_ARCH_DATA.md) outlines the contents of the ARCH dataset available on the web and how it differs from the version described in the paper.
 
 ### Acknowledgments
 
