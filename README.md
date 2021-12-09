@@ -17,7 +17,7 @@ Both of them were published in Proceedings of the IEEE/CVF Conference on Compute
 
 [README_ARCH.md](README_ARCH.md) describes what I did to reproduce the models from "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles". I used a lot of the existing code from the [VirTex](https://github.com/kdexd/virtex) GitHub Repository and extended their codebase to accommodate for the changed nature of the dataset and annotations.
 
-[README_ARCH_DATA.md](README_ARCH_DATA.md) outlines the contents of the ARCH dataset available on the web and how it differs from the version described in the paper.
+[README_ARCH_DATA.md](README_ARCH_DATA.md) describes the contents of the ARCH dataset available on the web and how it differs from the version described in the paper.
 
 ### Acknowledgments
 
