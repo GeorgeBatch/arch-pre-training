@@ -37,6 +37,8 @@ class ArchCaptioningDatasetExtended(Dataset):
         tokenizer: SentencePieceBPETokenizer,
         source: str="both",
         image_transform: Callable = T.DEFAULT_IMAGE_TRANSFORM,
+        # TODO: add a default random transform (to be applied to a batch=bag of images)
+        # random_image_transform: Callable = ,
         max_caption_length: int = 30,
     ):
         self._dset = ArchCaptionsDatasetRaw(data_root=data_root, source=source, split=split)
@@ -81,7 +83,8 @@ class ArchCaptioningDatasetExtended(Dataset):
             "The same transformation should be performed on all images in a bag => single version of the caption should appear"
         caption_tokens = self.caption_transform(caption=captions[0])["caption"]
 
-        # Convert each image from HWC to CHW format.
+        # Convert each image from HWC to CHW format and convert to tensors:
+        #   Transforms expect to receive tensors in (B, C, H, W) shape
         images = [np.transpose(image, (2, 0, 1)) for image in images] # [(Channel, Height, Width), ..., ] Bag Size times
         images = [torch.tensor(image, dtype=torch.float) for image in images]
 
