@@ -23,14 +23,16 @@ bash 0-download-arch.sh
 **Code:**
 * [arch/1-ARCH-Data-Exploration.ipynb](arch/1-ARCH-Data-Exploration.ipynb) contains my code for data exploration
 
+
 **From the original paper:**
+
 "ARCH contains 11,816 bags and 15,164 images in total.
 Figure 4c shows a more detailed breakdown by the number of bags according to the number of images within the bag, with the smallest bag size being 1 (9,772 samples) and the largest bag size being 9 for which we have only 7 samples."
 
+
 **Changes:**
-The dataset available on the web is smaller than the one described in the paper.
-I decided to recompute the statistics of the dataset.
-See [arch/1-ARCH-Data-Exploration.ipnb](arch/1-ARCH-Data-Exploration.ipynb) for .
+* The dataset available on the web is smaller than the one described in the paper.
+
 
 **Summary:**
 * Total Images. Books: 4270 `.png` images; PubMed: 3309 (3272 `.jpg`, 37 `.png`) images. Total: 7579 images.
@@ -38,14 +40,18 @@ See [arch/1-ARCH-Data-Exploration.ipnb](arch/1-ARCH-Data-Exploration.ipynb) for 
 * Books set has 2 ways of groupping images into bags. By `figure_id` and by `caption` fields of its annotation file. Pubmed set does not have the `figure_id` field so images are groupped into bags using capitons.
 * Books set annotation file contains 76 captions that correspond to 2 figure ids and 1 caption corresponds to 3 figure ids. This means that there are 78 more unique figure ids than captions. **This is suspected to be a mistake and should be addressed.**
 
+
 **Decisions:**
 * Ignored the entries of the annotation files with missing images.
 * Parsed the file extensions on the fly in the dataset classes.
 
+
 **TODO:**
 * Decide what to do with captions corresponding to multiple figures in the Books Set.
 
+
 **Full Version:**
+
 [README_ARCH_DATA.md](README_ARCH_DATA.md) contains everything found during the data exploration
 
 ## Creating annotation files
