@@ -36,7 +36,10 @@ This project was made as part of the CDT (PhD) in Health Data Science.
 
 We present ARCH, a computational pathology (CP) multiple instance captioning dataset to facilitate dense supervision of CP tasks. Existing CP datasets focus on narrow tasks; ARCH on the other hand contains dense diagnostic and morphological descriptions for a range of stains, tissue types and pathologies. Using intrinsic dimensionality estimation, we show that ARCH is the only CP dataset to (ARCH-)rival its computer vision analog MS-COCO Captions. We conjecture that an encoder pre-trained on dense image captions learns transferable representations for most CP tasks. We support the conjecture with evidence that ARCH representation transfers to a variety of pathology sub-tasks better than ImageNet features or representations obtained via self-supervised or multi-task learning on pathology images alone. We release our best model and invite other researchers to test it on their CP tasks.
 
-[[data](https://warwick.ac.uk/fac/cross_fac/tia/data/arch)] [[pdf](https://openaccess.thecvf.com/content/CVPR2021/papers/Gamper_Multiple_Instance_Captioning_Learning_Representations_From_Histopathology_Textbooks_and_Articles_CVPR_2021_paper.pdf)] [[supp](https://openaccess.thecvf.com/content/CVPR2021/supplemental/Gamper_Multiple_Instance_Captioning_CVPR_2021_supplemental.pdf)] [[arXiv](https://arxiv.org/abs/2103.05121)]
+[[data](https://warwick.ac.uk/fac/cross_fac/tia/data/arch)]
+[[pdf](https://openaccess.thecvf.com/content/CVPR2021/papers/Gamper_Multiple_Instance_Captioning_Learning_Representations_From_Histopathology_Textbooks_and_Articles_CVPR_2021_paper.pdf)]
+[[supp](https://openaccess.thecvf.com/content/CVPR2021/supplemental/Gamper_Multiple_Instance_Captioning_CVPR_2021_supplemental.pdf)]
+[[arXiv](https://arxiv.org/abs/2103.05121)]
 
 ```text
 @inproceedings{gamper2020multiple,
