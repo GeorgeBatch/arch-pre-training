@@ -4,7 +4,7 @@
 
 The dataset should be placed into `./datasets/ARCH/`
 
-You can download the 2 parts of the ARCH dataset (`books_set` and `pubmed_set`) from from https://warwick.ac.uk/fac/cross_fac/tia/data/arch.
+You can download the 2 parts of the ARCH dataset (`books_set` and `pubmed_set`) from https://warwick.ac.uk/fac/cross_fac/tia/data/arch.
 
 
 Alternatively, you can do it from the command line. The script uses `wget` to download the dataset, `unzip` to inflate the `.zip` files, deletes the `__MACOSX` folders and `.zip` archives.
@@ -37,7 +37,7 @@ Figure 4c shows a more detailed breakdown by the number of bags according to the
 **Summary:**
 * Total Images. Books: 4270 `.png` images; PubMed: 3309 (3272 `.jpg`, 37 `.png`) images. Total: 7579 images.
 * Books set annotation file contains 35 captions w/o images; Pubmed captions ([datasets/ARCH/pubmed_set/captions.json](datasets/ARCH/pubmed_set/captions.json)) map one-to-one to the downloaded images.
-* Books set has 2 ways of groupping images into bags. By `figure_id` and by `caption` fields of its annotation file. Pubmed set does not have the `figure_id` field so images are groupped into bags using capitons.
+* Books set has 2 ways of grouping images into bags. By `figure_id` and by `caption` fields of its annotation file. Pubmed set does not have the `figure_id` field so images are grouped into bags using captions.
 * Books set annotation file contains 76 captions that correspond to 2 figure ids and 1 caption corresponds to 3 figure ids. This means that there are 78 more unique figure ids than captions. **This is suspected to be a mistake and should be addressed.**
 
 
@@ -107,11 +107,11 @@ It results in the creation of:
 * [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides an extended PyTorch Dataset class (`CaptioningDataset`) which specifies
   1. The caption selected at random (COCO has multiple captions per image)
   2. Paired Image-Caption Augmentations to be used (horizontal flip combined with "left" <-> "right" switch)
-  3. Text tokenisation (after augmentations)
+  3. Text tokenization (after augmentations)
   4. Collate function to put the items into batches
 
 **ARCH Code (extended by me)**
-* [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides the extended version of the Dataset class analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended`. [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb) shows examples of its basic usage. It requires to specify a tokeniser model, e.g. "`datasets/vocab/arch_10k.model"`.
+* [virtex/data/datasets/captioning.py](virtex/data/datasets/captioning.py) provides the extended version of the Dataset class analogous to `CaptioningDataset` called `ArchCaptioningDatasetExtended`. [arch/5-ARCH-Dataset-Class-Extended.ipynb](arch/5-ARCH-Dataset-Class-Extended.ipynb) shows examples of its basic usage. It requires to specify a tokenizer model, e.g. "`datasets/vocab/arch_10k.model"`.
 
 **Differences to the VirTex Code:**
 ARCH has one or more images per caption. **I assume that only all images together will contain enough information to correspond to a caption.** This means that:
@@ -141,13 +141,13 @@ TODO: understand which changes need to be made to the config file.
 
 "the only difference with that of Desai et al. [12] is that of working with bags of image instances instead of a single instance"
 
-"For all MIC model training experiments, we set the hyper-paremeters, tokenization and training details according to Desai et al. [12] and their publicly available code, with a few exceptions as follows: H is set to 512, which also determines the width of each of the transformer layers and the number of attention heads; the batch size is set to 32 images or less irrespective of the bag sizes due to computational restraints, which are pre-computed before every epoch after re-shuffling the dataset indices. Finally, for the ease of training, we switched to a ADAM optimizer with a default learning rate of 1e-3 and an early stopping set to a patience of a held-out set validation loss of 10."
+"For all MIC model training experiments, we set the hyper-parameters, tokenization and training details according to Desai et al. [12] and their publicly available code, with a few exceptions as follows: H is set to 512, which also determines the width of each of the transformer layers and the number of attention heads; the batch size is set to 32 images or fewer irrespective of the bag sizes due to computational restraints, which are pre-computed before every epoch after re-shuffling the dataset indices. Finally, for the ease of training, we switched to a ADAM optimizer with a default learning rate of 1e-3 and an early stopping set to patience of a held-out set validation loss of 10."
 
-"For all of our MIC, MTL and MTL+MIC models, we employ standard data augmentations using [imaug](https://imgaug.readthedocs.io/en/latest/): custom random crop function such that letters are not cropped out); resize and re-scale; color jitter (brightness, contrast saturation and hue); Gaussian and/or salt and pepper noise, and JPEG compression artifacts."
+"For all of our MIC, MTL and MTL+MIC models, we employ standard data augmentations using [imaug](https://imgaug.readthedocs.io/en/latest/): custom random crop function such that letters are not cropped out; resize and re-scale; color jitter (brightness, contrast saturation and hue); Gaussian and/or salt and pepper noise, and JPEG compression artifacts."
 
 * resnet50 -> resnet18
 * Fast Food Transform
-* ? CLAM-slyle (not all of the layers)
+* ? CLAM-style (only some of the layers)
 * BatchNorm at the Input
 
 
