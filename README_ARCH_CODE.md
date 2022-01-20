@@ -12,3 +12,8 @@ pre-training in some systematic fashion.
 
 * scripts/build_vocabulary.py
     * datasets/coco/annotations/captions_train2017.json
+
+PretrainingDatasetFactory
+PretrainingModelFactory
+OptimizerFactory
+LRSchedulerFactory
