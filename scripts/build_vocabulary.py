@@ -15,7 +15,8 @@ parser = argparse.ArgumentParser(
     """
 )
 parser.add_argument(
-    "-c", "--captions", default="datasets/coco/annotations/captions_train2017.json",
+    "-c", "--captions",
+    default="datasets/coco/annotations/captions_train2017.json",
     help="Path to caption annotations file in COCO format.",
 )
 parser.add_argument(
@@ -75,7 +76,7 @@ if __name__ == "__main__":
 
         captions[i] = caption
 
-    # Create a temporary directory and dump the captions corpus as a text file
+    # Create a temporary directory and dump the captions' corpus as a text file
     # with one caption per line. That's how sentencepiece wants its input.
     tmpdir_path = tempfile.mkdtemp()
 
