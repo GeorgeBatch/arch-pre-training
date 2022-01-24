@@ -76,8 +76,7 @@ environment activated.
 -------------------------------------------------------------------------------
 
 
-Setup Datasets
---------------
+# Setup Datasets
 
 Datasets are assumed to exist in ``./datasets`` directory (relative to the
 project root) following the structure specified below. COCO is used for
@@ -86,109 +85,106 @@ tasks. This structure is compatible when using
 `Detectron2 <https://github.com/facebookresearch/detectron2>`_ for downstream
 tasks.
 
-COCO
-^^^^
-.. code-block::
+## COCO
 
-    datasets/coco/
-        annotations/
-            captions_{train,val}2017.json
-            instances_{train,val}2017.json
-        train2017/
-            # images in train2017 split
-        val2017/
-            # images in val2017 split
+```
+datasets/coco/
+    annotations/
+        captions_{train,val}2017.json
+        instances_{train,val}2017.json
+    train2017/
+        # images in train2017 split
+    val2017/
+        # images in val2017 split
+```
 
-LVIS
-^^^^
-.. code-block::
+## LVIS
+```
+datasets/coco/
+    train2017/
+    val2017/
+datasets/lvis/
+    lvis_v1.0_{train,val}.json
+```
 
-    datasets/coco/
-        train2017/
-        val2017/
-    datasets/lvis/
-        lvis_v1.0_{train,val}.json
+## PASCAL VOC
 
-PASCAL VOC
-^^^^^^^^^^
-.. code-block::
+```
+datasets/VOC2007/
+    Annotations/
+    ImageSets/
+        Main/
+            trainval.txt
+            test.txt
+    JPEGImages/
 
-    datasets/VOC2007/
-        Annotations/
-        ImageSets/
-            Main/
-                trainval.txt
-                test.txt
-        JPEGImages/
+datasets/VOC2012/
+    # Same as VOC2007 above
+```
 
-    datasets/VOC2012/
-        # Same as VOC2007 above
+## ImageNet
 
-ImageNet
-^^^^^^^^
-.. code-block::
+```
+datasets/imagenet/
+    train/
+        # One directory per category with images in it
+    val/
+        # One directory per category with images in it
+    ILSVRC2012_devkit_t12.tar.gz
+```
 
-    datasets/imagenet/
-        train/
-            # One directory per category with images in it
-        val/
-            # One directory per category with images in it
-        ILSVRC2012_devkit_t12.tar.gz
+## iNaturalist 2018
 
-iNaturalist 2018
-^^^^^^^^^^^^^^^^
-.. code-block::
+```
+datasets/inaturalist/
+    train_val2018/
+    annotations/
+        train2018.json
+        val2018.json
+```
 
-    datasets/inaturalist/
-        train_val2018/
-        annotations/
-            train2018.json
-            val2018.json
+## ARCH 2021
 
-
-ARCH 2021
-^^^^^^^^^^^^^^^^
-.. code-block::
-
-    datasets/ARCH/
-        annotations/
-            captions_{all, train, val}.json
-        books_set/
-            images/
-              # images in books set
-            captions.json
-            README.md
-        pubmed_set/
-            images/
-              # images in pubmed set
-            captions.json
-            README.md
+```
+datasets/ARCH/
+    annotations/
+        captions_{all, train, val}.json
+    books_set/
+        images/
+          # images in books set
+        captions.json
+        README.md
+    pubmed_set/
+        images/
+          # images in pubmed set
+        captions.json
+        README.md
+```
 
 -------------------------------------------------------------------------------
 
 
-Build vocabulary
+# Build vocabulary
 ----------------
 
 **Build a vocabulary out of COCO Captions ``train2017`` split.**
 
-    .. code-block:: shell
-
-        python scripts/build_vocabulary.py \
-            --captions datasets/coco/annotations/captions_train2017.json \
-            --vocab-size 10000 \
-            --output-prefix datasets/vocab/coco_10k \
-            --do-lower-case
-
+```shell
+python scripts/build_vocabulary.py \
+    --captions datasets/coco/annotations/captions_train2017.json \
+    --vocab-size 10000 \
+    --output-prefix datasets/vocab/coco_10k \
+    --do-lower-case
+```
 
 **Build a vocabulary out of ARCH Captions ``train`` split.**
 
-    .. code-block:: shell
-
-        python scripts/build_vocabulary_arch.py \
-            --captions datasets/ARCH/annotations/captions_train.json \
-            --vocab-size 10000 \
-            --output-prefix datasets/vocab/arch_10k \
-            --do-lower-case
+```shell
+python scripts/build_vocabulary_arch.py \
+    --captions datasets/ARCH/annotations/captions_train.json \
+    --vocab-size 10000 \
+    --output-prefix datasets/vocab/arch_10k \
+    --do-lower-case
+```
 
 That's it! You are all set to use this codebase.
