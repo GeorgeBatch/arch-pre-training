@@ -8,20 +8,24 @@ This project heavily relies on two papers:
 
 Both of them were published in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2021. **Neither of these papers is my own work.**
 
-
-
 [gamper2020multiple]: https://openaccess.thecvf.com/content/CVPR2021/html/Gamper_Multiple_Instance_Captioning_Learning_Representations_From_Histopathology_Textbooks_and_Articles_CVPR_2021_paper.html
 [virtex2020]: https://openaccess.thecvf.com/content/CVPR2021/html/Desai_VirTex_Learning_Visual_Representations_From_Textual_Annotations_CVPR_2021_paper.html
 
 ### My Contributions
 
-[README_ARCH.md](README_ARCH.md) describes what I did to reproduce the models from "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles". I used a lot of the existing code from the [VirTex](https://github.com/kdexd/virtex) GitHub Repository and extended their codebase to accommodate for the changed nature of the dataset and annotations.
+[README_ARCH_SETUP.md](README_ARCH_SETUP.md) extends the original [VirTex instructions](http://kdexd.xyz/virtex/virtex/usage/setup_dependencies.html) on how to setup the codebase.
 
 [README_ARCH_DATA.md](README_ARCH_DATA.md) describes the contents of the ARCH dataset available on the web and how it differs from the version described in the paper.
 
+[README_ARCH_CODE.md](README_ARCH_CODE.md) provides a systematic deep-dive into the VirTex source code and describes all the changes that need to be done in order to use it for pre-training on the ARCH dataset.
+
+[README_ARCH.md](README_ARCH.md) describes what I did to reproduce the models from "Multiple Instance Captioning: Learning Representations From Histopathology Textbooks and Articles". I used a lot of the existing code from the [VirTex](https://github.com/kdexd/virtex) GitHub Repository and extended their codebase to accommodate for the changed nature of the dataset and annotations.
+
+
+
 ### Acknowledgments
 
-This project was made as part of the CDT (PhD) in Health Data Science.
+This project is part of my CDT (PhD) in Health Data Science.
 
 **George Batchkala** is supported by Professor Fergus Gleeson’s A2 research funds and the EPSRC Center for Doctoral Training in Health Data Science (EP/S02428X/1).
 
