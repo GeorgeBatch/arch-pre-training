@@ -1,4 +1,4 @@
-This is a modified and slightly extended version of the setup information 
+This is a modified and slightly extended version of the setup information
 provided in:
 http://kdexd.xyz/virtex/virtex/usage/setup_dependencies.html
 
@@ -17,15 +17,31 @@ For these steps to install through Anaconda (or Miniconda).
 
 2. Clone the repository first.
 
+If working on a remote server, you might need to first load your git
+module:
+
+```shell
+module load git/2.33.1-GCCcore-11.2.0-nodocs
+```
+
 ```shell
 git clone https://www.github.com/GeorgeBatch/arch-pre-training
 ```
 
 3. Create a conda environment and install all the dependencies.
 
+If working on a remote server, you might need to first load your Anaconda
+module:
+
 ```shell
-cd virtex
-conda create -n virtex python=3.8
+module load Anaconda3/2020.11
+eval "$(conda shell.bash hook)"
+```
+
+
+```shell
+cd arch-pre-training
+conda create -n virtex python=3.8 # kept the environment name the same
 conda activate virtex
 pip install -r requirements.txt
 ```
@@ -33,12 +49,20 @@ pip install -r requirements.txt
 4. Install additional packages from Github.
 
 ```shell
-conda install virtex # omitted in the original repository
+conda activate virtex # omitted in the original repository
 
 pip install git+git://github.com/facebookresearch/fvcore.git#egg=fvcore
 pip install git+git://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
 ```
-        
+
+Install missing packages
+
+```shell
+conda install albumentations # augmentations
+conda install sentencepiece # tokenization
+conda install jupyter # to run in notebooks
+```
+
 
 5. Install this codebase as a package in development version.
 
@@ -121,13 +145,30 @@ iNaturalist 2018
             train2018.json
             val2018.json
 
+
+ARCH 2021
+^^^^^^^^^^^^^^^^
+.. code-block::
+
+    datasets/ARCH/
+        annotations/
+            captions_{all, train, val}.json
+        books_set/
+            images/
+            captions.json
+            README.md
+        pubmed_set/
+            images/
+            captions.json
+            README.md
+
 -------------------------------------------------------------------------------
 
 
 Build vocabulary
 ----------------
 
-Build a vocabulary out of COCO Captions ``train2017`` split.
+**Build a vocabulary out of COCO Captions ``train2017`` split.**
 
     .. code-block:: shell
 
@@ -137,23 +178,15 @@ Build a vocabulary out of COCO Captions ``train2017`` split.
             --output-prefix datasets/vocab/coco_10k \
             --do-lower-case
 
+
+**Build a vocabulary out of ARCH Captions ``train`` split.**
+
+    .. code-block:: shell
+
+        python scripts/build_vocabulary_arch.py \
+            --captions datasets/ARCH/annotations/captions_train.json \
+            --vocab-size 10000 \
+            --output-prefix datasets/vocab/arch_10k \
+            --do-lower-case
+
 That's it! You are all set to use this codebase.
-
-## Install Dependencies
-
-
-If working on a remote server, you might need to first load your Anaconda 
-module:
-
-```shell
-module load Anaconda3/2020.11
-eval "$(conda shell.bash hook)"
-```
-
-
-```shell
-cd virtex
-conda create -n virtex python=3.8
-conda activate virtex
-pip install -r requirements.txt
-```
