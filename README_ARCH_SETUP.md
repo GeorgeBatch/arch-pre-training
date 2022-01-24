@@ -49,7 +49,7 @@ pip install -r requirements.txt
 4. Install additional packages from Github.
 
 ```shell
-conda activate virtex # omitted in the original repository
+conda activate virtex # just in case (if already done the previous step)
 
 pip install git+git://github.com/facebookresearch/fvcore.git#egg=fvcore
 pip install git+git://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
