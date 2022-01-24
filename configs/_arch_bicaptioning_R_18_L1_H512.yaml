@@ -8,8 +8,8 @@ CUDNN_BENCHMARK: true
 CUDNN_DETERMINISTIC: false
 
 DATA:
-  ROOT: "datasets/ARCH" # changed coco -> ARCH
-  TOKENIZER_MODEL: "datasets/vocab/coco_10k.model" # TODO: change
+  ROOT: "datasets/ARCH" # changed: coco -> ARCH
+  TOKENIZER_MODEL: "datasets/vocab/arch_10k.model" # changed: coco -> arch
   VOCAB_SIZE: 10000
   UNK_INDEX: 0
   SOS_INDEX: 1
@@ -17,13 +17,13 @@ DATA:
   MASK_INDEX: 3
 
   IMAGE_CROP_SIZE: 224
-  MAX_CAPTION_LENGTH: 30
+  MAX_CAPTION_LENGTH: 30 # TODO: check if it's enough
 
   IMAGE_TRANSFORM_TRAIN:
     - "random_resized_crop"
-    - "horizontal_flip"
     - "color_jitter"
     - "normalize"
+    - "tensor_horizontal_flip" # changed: flip the whole bag (tensor)
 
   IMAGE_TRANSFORM_VAL:
     - "smallest_resize"
@@ -34,7 +34,7 @@ MODEL:
   NAME: "virtex"
 
   VISUAL:
-    NAME: "torchvision::resnet18" # changed 50 -> 18
+    NAME: "torchvision::resnet18" # changed: 50 -> 18
     PRETRAINED: false
     FROZEN: false
 

@@ -22,6 +22,7 @@ import re
 from functools import partial
 from typing import Any, Callable, Dict, Iterable, List
 
+import torchvision
 import albumentations as alb
 from torch import nn, optim
 
@@ -145,7 +146,7 @@ class ImageTransformsFactory(Factory):
             alb.ColorJitter, brightness=0.4, contrast=0.4, saturation=0.4, hue=0.1, p=0.8
         ),
         "horizontal_flip": partial(T.HorizontalFlip, p=0.5),
-
+        "tensor_horizontal_flip": partial(T.TensorHorizontalFlip, p=0.5),
         # Color normalization: whenever selected, always applied. This accepts images
         # in [0, 255], requires mean and std in [0, 1] and normalizes to `N(0, 1)`.
         "normalize": partial(
@@ -218,7 +219,9 @@ class PretrainingDatasetFactory(Factory):
         for name in getattr(_C.DATA, f"IMAGE_TRANSFORM_{split.upper()}"):
             # Pass dimensions if cropping / resizing, else rely on the defaults
             # as per `ImageTransformsFactory`.
-            if "resize" in name or "crop" in name:
+            if name == "tensor_horizontal_flip":
+                tensor_flip_transform = ImageTransformsFactory.create(name)
+            elif "resize" in name or "crop" in name:
                 image_transform_list.append(
                     ImageTransformsFactory.create(name, _C.DATA.IMAGE_CROP_SIZE)
                 )
@@ -226,6 +229,7 @@ class PretrainingDatasetFactory(Factory):
                 image_transform_list.append(ImageTransformsFactory.create(name))
 
         kwargs["image_transform"] = alb.Compose(image_transform_list)
+        kwargs["tensor_flip_transform"] = tensor_flip_transform
 
         # Add dataset specific kwargs.
         if _C.MODEL.NAME != "multilabel_classification":

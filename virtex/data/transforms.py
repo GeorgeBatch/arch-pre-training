@@ -2,6 +2,7 @@ import random
 from typing import List
 import unicodedata
 
+import torchvision
 import albumentations as alb
 import cv2
 
@@ -143,6 +144,7 @@ class HorizontalFlip(ImageCaptionTransform):
     """
 
     def apply(self, img, **params):
+        # 1 stands for flipping in y-axis, not for the probability
         return cv2.flip(img, 1)
 
     def apply_to_caption(self, caption, **params):
@@ -152,6 +154,33 @@ class HorizontalFlip(ImageCaptionTransform):
             .replace("[TMP]", "right")
         )
         return caption
+
+
+class TensorHorizontalFlip(HorizontalFlip):
+    r"""
+    Flip the batch of images (tensor of shape: ..., H, W) horizontally
+    randomly (equally likely) and replace the word "left" with "right" in the
+    caption.
+
+    .. note::
+
+        This transform can also work on images only (without the captions).
+        It only overrides the apply method for images so that it can flip a
+        tensor of shape (B, C, H, W) and not just an image of shape (H, W, C)
+
+    Examples:
+        >>> flip = TensorHorizontalFlip(p=0.5)
+        >>> out1 = tensor_flip(image=image_tensor, caption=caption)  # keys: {
+        "image", "caption"}
+        >>> # Also works with image-tensors (without caption).
+        >>> out2 = tensor_flip(image=image_tensor)  # keys: {"image"}
+
+    """
+    def apply(self, img_tensor, **params):
+        # flip the tensor (`p` can be specified because both HorizontalFlip and
+        # TensorHorizontalFlip inherit from alb.BasicTransform which allows
+        # to specify the probability of execution)
+        return torchvision.transforms.functional.hflip(img_tensor)
 
 
 class RandomResizedSquareCrop(alb.RandomResizedCrop):
@@ -213,4 +242,6 @@ DEFAULT_IMAGE_TRANSFORM = alb.Compose(
     ]
 )
 r"""Default transform without any data augmentation (during pretraining)."""
+
+DEFAULT_FLIP_TRANSFORM = TensorHorizontalFlip(p=0.5)
 # =============================================================================
