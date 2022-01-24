@@ -155,10 +155,12 @@ ARCH 2021
             captions_{all, train, val}.json
         books_set/
             images/
+              # images in books set
             captions.json
             README.md
         pubmed_set/
             images/
+              # images in pubmed set
             captions.json
             README.md
 
