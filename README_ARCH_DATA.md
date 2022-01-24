@@ -8,7 +8,7 @@ Some images from the `books_set` may contain letters on top. This letters are th
 
 All of the images in the `./datasets/ARCH/books_set/images/` directory have a corresponding caption, but not all captions have a corresponding image.
 
-**This table was computed from captions.json:**
+**This table was computed from `./datasets/ARCH/books_set/captions.json`:**
 
 Bag Size | # Bags
 -------- | ------
