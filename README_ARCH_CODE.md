@@ -19,7 +19,13 @@ TODO: understand the senetence length - should I use the default 30 words?
 
 ## Pre-training
 
-`scripts/pretrain_virtex.py` is the main script for running the pre-training process. It starts with importing standard Python libraries. But also utilises custom classes and functions from this repository.
+`scripts/pretrain_virtex.py` is the main script for running the pre-training 
+process. It is very generic and does not need to be changed at all, instead 
+the configuration `.yml` file needs to be changed and other code files need 
+to be extended.
+
+It starts with importing standard Python libraries. But also 
+utilises custom classes and functions from this repository.
 
 ```Python
 from virtex.config import Config  # 1
@@ -35,11 +41,13 @@ import virtex.utils.distributed as dist
 from virtex.utils.timer import Timer
 ```
 
-1. `Config` class from `virtex/config.py` takes a `config_file` configuration file path as its main __init__ argument and an optional argument of the `override_list`. The default values set in `virtex/config.py` can be overridden with the `.yml` file so `virtex/config.py` does not need to be changed. See http://kdexd.xyz/virtex/virtex/config.html for full description.
+----
+### 1. Config
 
-**TODO:** make a configuration `.yml` file to pass as an argument to the `Config` class through the parser.
-
-2. `PretrainingDatasetFactory` class from `virtex/factories.py` creates a PyTorch Dataset(s) for pretraining VirTex models. It uses `ImageTransformsFactory` class to create image transforms, put them in a list, and use `albumentations.Compose()` method to compose them into a single transform. For captioning task it uses `CaptioningDataset` (gets image transform passed down), which in turn uses `CocoCaptionsDataset` (raw extraction).
+`Config` class from `virtex/config.py` takes a `config_file` configuration 
+file path as its main __init__ argument 
+and an optional argument of the `override_list`. The default values set in 
+`virtex/config.py` can be overridden with the `.yml` file so `virtex/config.py` does not need to be changed. See http://kdexd.xyz/virtex/virtex/config.html for full description.
 
 **TODO:**
 * Make a version of CocoCaptionsDataset for ARCH ✅
@@ -57,8 +65,12 @@ from virtex.utils.timer import Timer
 
 **TODO:** understand which parameters to put into config to have the same optimization as in the paper.
 
-5. `LRSchedulerFactory` class from `virtex/factories.py` creates an lr sheduler directly from config. All schedulers have a built-in LR warmup schedule before actual LR scheduling (decay) starts.
+----
+### 5. LRSchedulerFactory
+`LRSchedulerFactory` class from `virtex/factories.py` creates an lr sheduler directly from config. All schedulers have a built-in LR warmup schedule before actual LR scheduling (decay) starts.
 
 **TODO:** understand which parameters to put into config to have the same lr schedule as in the paper.
 
-6. The rest of the custom iports seem to be fine and do not need any input.
+----
+### 6. The rest
+The rest of the custom iports seem to be fine and do not need any input.
