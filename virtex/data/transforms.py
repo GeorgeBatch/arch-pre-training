@@ -169,13 +169,14 @@ class TensorHorizontalFlip(HorizontalFlip):
         tensor of shape (B, C, H, W) and not just an image of shape (H, W, C)
 
     Examples:
-        >>> flip = TensorHorizontalFlip(p=0.5)
+        >>> tensor_flip = TensorHorizontalFlip(p=0.5)
         >>> out1 = tensor_flip(image=image_tensor, caption=caption)  # keys: {
         "image", "caption"}
         >>> # Also works with image-tensors (without caption).
         >>> out2 = tensor_flip(image=image_tensor)  # keys: {"image"}
 
     """
+
     def apply(self, img_tensor, **params):
         # flip the tensor (`p` can be specified because both HorizontalFlip and
         # TensorHorizontalFlip inherit from alb.BasicTransform which allows
