@@ -50,10 +50,71 @@ and an optional argument of the `override_list`. The default values set in
 `virtex/config.py` can be overridden with the `.yml` file so `virtex/config.py` does not need to be changed. See http://kdexd.xyz/virtex/virtex/config.html for full description.
 
 **TODO:**
-* Make a version of CocoCaptionsDataset for ARCH ✅
-* Make a version of CaptioningDataset for ARCH (figure out a way to transform all the images in the batch with the same flip so that they can be given together with the caption) ⏳
+1. make a configuration `.yml` file to pass as an argument to the 
+`Config` class through the parser.
 
-**Problem** Albumantation transforms want to be given an image, not a batch in a tensor.
+#### Config Changes
+
+**DATA**
+* **ROOT**: "datasets/coco" -> "datasets/ARCH"
+* **TOKENIZER_MODEL**: "datasets/vocab/coco_10k.model" -> 
+  "datasets/vocab/**arch_10k**.model"
+* **MAX_CAPTION_LENGTH**: TODO - check if 30 is enough
+* **IMAGE_TRANSFORM_TRAIN**: "horizontal_flip" -> "tensor_horizontal_flip"
+
+
+**MODEL**
+* **NAME**: "virtex" -> "arch". Reason: Names in 
+  :class:`PretrainingDatasetFactory` factory match with names in 
+  :class:`PretrainingModelFactory` because both use same config parameter 
+  `MODEL.NAME` to create objects.
+
+TODO: check all the model changes that are needed.
+
+* **NAME.VISUAL**: "torchvision::resnet50" -> "torchvision::resnet18"
+* **NAME.TEXTUAL**: H=1024 (VirTex) -> H=512 (ARCH); A:=H/64=8, and F:=4H=2048
+
+
+
+
+----
+### 2. PretrainingDatasetFactory
+
+`PretrainingDatasetFactory` class from `virtex/factories.py` creates a 
+PyTorch Dataset(s) for pretraining VirTex models. It uses `ImageTransformsFactory` class to create image transforms, put them in a list, and use `albumentations.Compose()` method to compose them into a single transform. For captioning task it uses `CaptioningDataset` (gets image transform passed down), which in turn uses `CocoCaptionsDataset` (raw extraction).
+
+**TODO:**
+
+1. Make a version of CocoCaptionsDataset for ARCH: `ArchCaptionsDatasetRaw` ✅ 
+2. Make a version of CaptioningDataset for ARCH: `ArchCaptioningDatasetExtended` ✅ 
+3. Change all the relevant fields in the `.yml` file.
+
+For the second task, need to figure out a way to 
+transform all the images in the batch with the same flip so that they can 
+be given together with the caption. This is achieved by performing all other 
+transforms beforehand, placing all images from the bag into a tensor and 
+then applying the flip on the tensor. Since the `albumentations`-based 
+augmentations require individual images as inputs, a new class 
+`TensorHorizontalFlip` is defined in `virtex/data/transforms.py`. It 
+overrides the image-flipping method of the `HorizontalFlip` class from 
+VirTex but keeps the method for changing the caption accordingly.
+
+This also required to
+* add both classes (`ArchCaptionsDatasetRaw` and 
+`ArchCaptioningDatasetExtended`) into `virtex/data/__init__.py`; and
+* change the `PretrainingDatasetFactory` and 
+`ImageTransformsFactory` classes in `virtex/factories.py`.
+  * `ImageTransformsFactory` got an extra line defining 
+    special `tensor_horizontal_flip` operation:
+```python
+"tensor_horizontal_flip": partial(T.TensorHorizontalFlip, p=0.5)
+```
+  * `PretrainingDatasetFactory` gets
+    * PRODUCTS dictionary extended with an option `"arch": vdata. ArchCaptioningDatasetExtended`
+    * 
+
+**Problem** `albumentations` transforms want to be given an image, not a batch 
+in a tensor.
 
 **Idea**: do not put HorizontalFlip transform into the config file - do it separately.
 

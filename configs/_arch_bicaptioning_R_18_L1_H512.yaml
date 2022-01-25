@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# Base config: VirTex pretraining for our "base" bicaptioning model:
+# Base config: VirTex pretraining for our "arch-base" bicaptioning model:
 # ResNet-18 + (L = 1, H = 512) transformer trained for 500K iterations.
 # -----------------------------------------------------------------------------
 RANDOM_SEED: 0
@@ -22,16 +22,16 @@ DATA:
   IMAGE_TRANSFORM_TRAIN:
     - "random_resized_crop"
     - "color_jitter"
-    - "normalize"
-    - "tensor_horizontal_flip" # changed: flip the whole bag (tensor)
+    #  - "normalize": # changed: instead of ImageNet normalization, use BatchNorm as the first layer
+    - "tensor_horizontal_flip" # changed: horizontal_flip -> tensor_horizontal_flip
 
   IMAGE_TRANSFORM_VAL:
     - "smallest_resize"
     - "center_crop"
-    - "normalize"
+    #  - "normalize": # changed: instead of ImageNet normalization, use BatchNorm as the first layer
 
 MODEL:
-  NAME: "virtex"
+  NAME: "arch" # Changed: virtex -> arch
 
   VISUAL:
     NAME: "torchvision::resnet18" # changed: 50 -> 18

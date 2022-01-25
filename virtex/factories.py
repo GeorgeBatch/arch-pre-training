@@ -189,6 +189,7 @@ class PretrainingDatasetFactory(Factory):
     """
 
     PRODUCTS: Dict[str, Callable] = {
+        "arch": vdata.ArchCaptioningDatasetExtended,
         "virtex": vdata.CaptioningDataset,
         "bicaptioning": vdata.CaptioningDataset,
         "captioning": vdata.CaptioningDataset,
