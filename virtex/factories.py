@@ -421,7 +421,8 @@ class PretrainingModelFactory(Factory):
     """
 
     PRODUCTS: Dict[str, Callable] = {
-        # First two are basically the same. Added for shorthand notation.
+        # First three are basically the same. Added for shorthand notation.
+        "arch": vmodels.VirTexModel,
         "virtex": vmodels.VirTexModel,
         "bicaptioning": vmodels.BidirectionalCaptioningModel,
         "captioning": vmodels.ForwardCaptioningModel,
@@ -447,7 +448,7 @@ class PretrainingModelFactory(Factory):
 
         # Add model specific kwargs. Refer call signatures of specific models
         # for matching kwargs here.
-        if _C.MODEL.NAME in {"virtex", "captioning", "bicaptioning"}:
+        if _C.MODEL.NAME in {"arch", "virtex", "captioning", "bicaptioning"}:
             kwargs = {
                 "sos_index": _C.DATA.SOS_INDEX,
                 "eos_index": _C.DATA.EOS_INDEX,

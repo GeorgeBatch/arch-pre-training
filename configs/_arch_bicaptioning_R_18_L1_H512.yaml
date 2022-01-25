@@ -39,7 +39,7 @@ MODEL:
     FROZEN: false
 
   TEXTUAL:
-    NAME: "transdec_postnorm::L1_H512_A8_F2048" # changed: H=512 (ARCH); A:=H/64=8, and F:=4H=2048 (VirTex)
+    NAME: "transdec_postnorm::L1_H512_A8_F2048" # changed: H=1024 (VirTex) -> H=512 (ARCH); A:=H/64=8, and F:=4H=2048
     DROPOUT: 0.1
 
   DECODER:

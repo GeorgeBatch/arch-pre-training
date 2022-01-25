@@ -118,11 +118,50 @@ in a tensor.
 
 **Idea**: do not put HorizontalFlip transform into the config file - do it separately.
 
-3. `PretrainingModelFactory` class from `virtex/factories.py` creates a model directly from config file.
 
-**TODO:** understand which parameters to put into config to have the same visual backbone and textual head as in the paper.
+----
+### 3. PretrainingModelFactory
+`PretrainingModelFactory` class from `virtex/factories.py` creates a 
+model directly from config file. Uses **MODEL.NAME**, **MODEL.NAME.VISUAL** ,
+and **MODEL.NAME.TEXTUAL** as the main arguments to choose which of the models
+to create. 
 
-4. `OptimizerFactory` class from `virtex/factories.py` creates an optimizer directly from config
+**TODO:**
+* Understand which parameters to put into config to have the same visual backbone and textual head as in the paper.
+* Make any changes to the class if needed.
+
+The model for ARCH dataset is the same as the main `VirTexModel` so we just 
+set it in `PretrainingModelFactory` class.
+
+Changes:
+* Add to "arch" to PRODUCTS since **MODEL.NAME** we set is "arch".
+    ```python
+    "arch": vmodels.VirTexModel
+    ```
+* Add "arch" to the list of model names in:
+```python
+        if _C.MODEL.NAME in {"arch", "virtex", "captioning", "bicaptioning"}:
+            kwargs = {
+                "sos_index": _C.DATA.SOS_INDEX,
+                "eos_index": _C.DATA.EOS_INDEX,
+                "decoder": CaptionDecoderFactory.from_config(_C),
+            }
+```
+
+`PretrainingModelFactory` uses 2 factories from the same file:
+* `VisualBackboneFactory` class; and
+* `TextualHeadFactory` class.
+
+They are both fully specified by their respective names in the config file:
+**MODEL.NAME.VISUAL** and **MODEL.NAME.TEXTUAL**.
+
+**TODO:**
+* check if ResNet-18 works
+* add batch-normalization layer to it at the front
+
+----
+### 4. OptimizerFactory
+`OptimizerFactory` class from `virtex/factories.py` creates an optimizer directly from config
 
 **TODO:** understand which parameters to put into config to have the same optimization as in the paper.
 

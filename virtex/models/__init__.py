@@ -9,7 +9,8 @@ from .classification import (
     TokenClassificationModel,
 )
 
-
+# VirTexModel is same as BidirectionalCaptioningModel
+# See virtex/models/captioning.py file
 __all__ = [
     "VirTexModel",
     "BidirectionalCaptioningModel",
