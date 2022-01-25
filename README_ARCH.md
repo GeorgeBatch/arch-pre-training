@@ -116,10 +116,17 @@ It results in the creation of:
 **Differences to the VirTex Code:**
 ARCH has one or more images per caption. **I assume that only all images together will contain enough information to correspond to a caption.** This means that:
 1. There is no need to select a caption at random (only one present anyway)
-2. Images from one bag should be given together as one batch with a single caption as its label.
-3. All transforms (both fixed and random) except for the "flips" can be different for different images in the bag since only the "flips" are connected to the changes in captions. After all transforms are performed, the images should be put in a single tensor of shape (Batch Size = Bag Size, C, Height, Width).
-4. If the flip is performed, it should be the same flip so that the caption is adjusted in the same way.
-
+2. Images from one bag should be given together as one batch with a single 
+   caption as its label.
+3. All transforms (both fixed and random) except for the "flips" can be 
+   different for different images in the bag since only the "flips" are 
+   connected to the changes in captions. After all transforms are performed, 
+   the images should be put in a single tensor of shape (Batch Size = Bag 
+   Size, C, Height, Width).
+4. If the flip is performed, it should be the same flip so that the caption 
+   is adjusted in the same way. This is achieved by performing all other 
+   transforms beforehand, placing all images from the bag into a tensor and 
+   then applying the flip on the tensor.
 
 ## Libraries used in the ARCH paper
 
@@ -147,7 +154,6 @@ TODO: understand which changes need to be made to the config file.
 
 * resnet50 -> resnet18
 * Fast Food Transform
-* ? CLAM-style (only some of the layers)
 * BatchNorm at the Input
 
 
