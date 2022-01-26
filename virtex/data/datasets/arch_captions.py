@@ -39,10 +39,13 @@ class ArchCaptionsDatasetRaw(Dataset):
                 # if source="both", then no filtering needed
                 # if source is one of the ["books", "pubmed"], LHS=False, RHS will filter the needed captions
 
-                # make a check that the image exist before adding its `uuid` or `path`
-                assert os.path.exists(ann['path']), f"{ann['path']} does not exist!"
+                # annotation file contains a path relative to the `data_root`
+                absolut_path = f"{data_root}/{ann['path']}"
 
-                captions_to_image_filepaths[ann['caption']].append(ann['path'])
+                # make a check that the image exist before adding its `uuid` or `path`
+                assert os.path.exists(absolut_path), f"{absolut_path} does not exist!"
+
+                captions_to_image_filepaths[ann['caption']].append(absolut_path)
                 # uuid (string); intid (int)
                 captions_to_uuids[ann['caption']].append(ann['uuid'])
                 captions_to_intids[ann['caption']].append(int(idx))
