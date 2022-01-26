@@ -244,5 +244,14 @@ DEFAULT_IMAGE_TRANSFORM = alb.Compose(
 )
 r"""Default transform without any data augmentation (during pretraining)."""
 
+# -----------------------------------------------------------------------------
+ARCH_DEFAULT_IMAGE_TRANSFORM = alb.Compose(
+    [
+        alb.SmallestMaxSize(256, p=1.0),
+        CenterSquareCrop(224, p=1.0),
+    ]
+)
+r"""Default transform for ARCH dataset without any data augmentation (during pretraining)."""
+
 DEFAULT_FLIP_TRANSFORM = TensorHorizontalFlip(p=0.5)
 # =============================================================================
