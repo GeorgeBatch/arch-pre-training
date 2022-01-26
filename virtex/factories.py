@@ -184,8 +184,8 @@ class PretrainingDatasetFactory(Factory):
     As an exception, the dataset for ``multilabel_classification`` provides
     COCO images and labels of their bounding box annotations.
 
-    Possible choices: ``{"bicaptioning", "captioning", "masked_lm",
-    "token_classification", "multilabel_classification"}``.
+    Possible choices: ``{"arch", "virtex", "bicaptioning", "captioning",
+    "masked_lm", "token_classification", "multilabel_classification"}``.
     """
 
     PRODUCTS: Dict[str, Callable] = {
@@ -397,7 +397,7 @@ class TextualHeadFactory(Factory):
             feedforward_size = int(architecture.group(4))
 
             # Mask the future tokens for autoregressive captioning.
-            mask_future = _C.MODEL.NAME in {"virtex", "captioning", "bicaptioning"}
+            mask_future = _C.MODEL.NAME in {"arch", "virtex", "captioning", "bicaptioning"}
 
             kwargs.update(
                 hidden_size=hidden_size,
