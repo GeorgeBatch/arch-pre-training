@@ -116,8 +116,22 @@ This also required to
 **Problem** `albumentations` transforms want to be given an image, not a batch 
 in a tensor.
 
-**Idea**: do not put HorizontalFlip transform into the config file - do it separately.
+#### From ARCH paper
 
+For all of our MIC, MTL and MTL+MIC models, we employ standard data augmentations
+using [imaug](https://imgaug.readthedocs.io/en/latest/index.html):
+1. custom random crop function (such that letters are not cropped out);
+2. [resize](https://imgaug.readthedocs.io/en/latest/source/overview/size.html?highlight=resize#resize) and [re-scale](https://imgaug.readthedocs.io/en/latest/source/api_augmenters_size.html?highlight=re-scale#imgaug.augmenters.size.Scale);
+3. color jitter ([brightness](https://imgaug.readthedocs.io/en/latest/source/overview/imgcorruptlike.html?highlight=brightness#brightness), [contrast saturation](https://imgaug.readthedocs.io/en/latest/source/overview/imgcorruptlike.html?highlight=contrast%20saturation#contrast) and [hue](https://imgaug.readthedocs.io/en/latest/source/overview/color.html?highlight=hue));
+4. [Gaussian](https://imgaug.readthedocs.io/en/latest/source/overview/arithmetic.html?highlight=gaussian%20noise#additivegaussiannoise) and/or [salt and pepper](https://imgaug.readthedocs.io/en/latest/source/overview/arithmetic.html?highlight=salt%20and%20pepper#saltandpepper) noise; and
+5. [JPEG compression](https://imgaug.readthedocs.io/en/latest/source/overview/arithmetic.html?highlight=JPEG%20compression%20artifacts#jpegcompression) artifacts.
+
+Everything except the custom cropping has already been implemented by VirTex authors
+using [albumentations](https://albumentations.ai/) library. I also added custom
+horizontal flip to be able to flip all images in the bag together with their caption
+at the same time.
+
+**TODO:** Understand **custom cropping** with imgaug that will preserve letters on the images. 
 
 ----
 ### 3. PretrainingModelFactory
