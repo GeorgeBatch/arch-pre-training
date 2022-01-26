@@ -222,6 +222,7 @@ class PretrainingDatasetFactory(Factory):
             # as per `ImageTransformsFactory`.
             if name == "tensor_horizontal_flip":
                 tensor_flip_transform = ImageTransformsFactory.create(name)
+                kwargs["tensor_flip_transform"] = tensor_flip_transform
             elif "resize" in name or "crop" in name:
                 image_transform_list.append(
                     ImageTransformsFactory.create(name, _C.DATA.IMAGE_CROP_SIZE)
@@ -230,7 +231,6 @@ class PretrainingDatasetFactory(Factory):
                 image_transform_list.append(ImageTransformsFactory.create(name))
 
         kwargs["image_transform"] = alb.Compose(image_transform_list)
-        kwargs["tensor_flip_transform"] = tensor_flip_transform
 
         # Add dataset specific kwargs.
         if _C.MODEL.NAME != "multilabel_classification":
