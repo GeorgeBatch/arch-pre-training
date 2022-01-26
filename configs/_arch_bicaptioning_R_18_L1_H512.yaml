@@ -46,9 +46,8 @@ MODEL:
     NAME: "beam_search"
     BEAM_SIZE: 5
 
-OPTIM: # TODO: change ("sgd", 0.9, 0.0001) -> ("Adam", 1e-3)
-  OPTIMIZER_NAME: "sgd"
-  SGD_MOMENTUM: 0.9
+OPTIM: # TODO: change ("sgd", momentum=0.9, wd=0.0001) -> ("Adam", lr=1e-3)
+  OPTIMIZER_NAME: "adam" # changed: sgd -> adam; removed OPTIM.SGD_MOMENTUM
   WEIGHT_DECAY: 0.0001
 
   LOOKAHEAD:
@@ -57,7 +56,7 @@ OPTIM: # TODO: change ("sgd", 0.9, 0.0001) -> ("Adam", 1e-3)
     STEPS: 5
 
   BATCH_SIZE: 32 # Changed: 256 -> 32
-  CNN_LR: 0.2 # TODO: change ("sgd", 0.9, 0.0001) -> ("Adam", 1e-3)
+  CNN_LR: 0.2
   LR: 0.001
   NUM_ITERATIONS: 500000
 

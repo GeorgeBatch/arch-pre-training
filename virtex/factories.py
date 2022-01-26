@@ -509,7 +509,9 @@ class CaptionDecoderFactory(Factory):
 class OptimizerFactory(Factory):
     r"""Factory to create optimizers. Possible choices: ``{"sgd", "adamw"}``."""
 
-    PRODUCTS: Dict[str, Callable] = {"sgd": optim.SGD, "adamw": optim.AdamW}
+    PRODUCTS: Dict[str, Callable] = {"sgd": optim.SGD, "adamw": optim.AdamW,
+                                     "adam": optim.Adam
+                                     }
 
     @classmethod
     def from_config(
