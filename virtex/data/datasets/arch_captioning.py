@@ -31,18 +31,19 @@ class ArchCaptioningDatasetExtended(Dataset):
     """
 
     def __init__(
-        self,
-        data_root: str,
-        split: str,
-        tokenizer: SentencePieceBPETokenizer,
-        source: str="both",
-        image_transform: Callable = T.DEFAULT_IMAGE_TRANSFORM,
-        # TODO: add a default random transform (to be applied to a batch=bag of images)
-        # random_image_transform: Callable = ,
-        max_caption_length: int = 30,
+            self,
+            data_root: str,
+            split: str,
+            tokenizer: SentencePieceBPETokenizer,
+            source: str = "both",
+            image_transform: Callable = T.ARCH_DEFAULT_IMAGE_TRANSFORM,
+            tensor_flip_transform: Callable = None,
+            max_caption_length: int = 30,
     ):
-        self._dset = ArchCaptionsDatasetRaw(data_root=data_root, source=source, split=split)
+        self._dset = ArchCaptionsDatasetRaw(data_root=data_root, source=source,
+                                            split=split)
         self.image_transform = image_transform
+        self.tensor_flip_transform = tensor_flip_transform
         self.caption_transform = alb.Compose(
             [
                 T.NormalizeCaption(),
@@ -56,8 +57,7 @@ class ArchCaptioningDatasetExtended(Dataset):
         return len(self._dset)
 
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
-
-        # keys: {"image_id", "image", "captions"}
+        # keys: {"image_ids", "images", "caption"}
         instance = self._dset[idx]
         image_ids, images, caption = (
             instance["image_ids"],
@@ -65,41 +65,75 @@ class ArchCaptioningDatasetExtended(Dataset):
             instance["caption"],
         )
 
+        # # debugging
+        # print("Checkpoint 1")
+        # print("Shapes before applying self.image_transform", [image.shape for image in images])
+
         # List[int] -> np.array of shape (len(image_ids), )
         image_ids = np.array(image_ids)
         # (len(image_ids), ) -> (len(image_ids), 1)
         image_ids = image_ids.reshape((image_ids.shape[0], 1))
 
-        # Transform image-caption pairs.
-        #    All images need to be resized to the same size to put them into a tensor.
-        # Pass in caption to image_transform due to paired horizontal flip.
-        # Caption won't be tokenized/processed here.
-        image_caption_pairs = [self.image_transform(image=image, caption=caption) for image in images]
+        # # debugging
+        # print("Checkpoint 2")
 
-        # split images and captions
-        images = [image_caption["image"] for image_caption in image_caption_pairs]
-        captions = [image_caption["caption"] for image_caption in image_caption_pairs]
-        assert all([captions[0] == captions[i] for i in range(len(captions))]), \
-            "The same transformation should be performed on all images in a bag => single version of the caption should appear"
-        caption_tokens = self.caption_transform(caption=captions[0])["caption"]
+        # Transform images, no flips at this stage not to create multiple versions of the caption!
+        #     Before flipping all images need to be resized to the same size to put them into a tensor.
+        #     Caption won't be tokenized/processed here.
+        #     Albumentations transforms require named arguments - can't avoid it.
+
+        images = [self.image_transform(image=image)["image"] for image in
+                  images]
+        # print("Shapes after applying self.image_transform", [image.shape for image in images])
+
+        # # # debugging
+        # print("Checkpoint 3")
 
         # Convert each image from HWC to CHW format and convert to tensors:
-        #   Transforms expect to receive tensors in (B, C, H, W) shape
-        images = [np.transpose(image, (2, 0, 1)) for image in images] # [(Channel, Height, Width), ..., ] Bag Size times
+        #     PyTorch Transforms expect to receive tensors in (B, C, H, W) shape
+        #     [(Channel, Height, Width), ..., ] Bag Size times
+        images = [np.transpose(image, (2, 0, 1)) for image in images]
         images = [torch.tensor(image, dtype=torch.float) for image in images]
 
+        # # # debugging
+        # print("Checkpoint 4")
+
+        # stack all the images into a tensor: (bag_size=batch_size, Channel, Height, Width)
+        images = torch.stack(images, dim=0)
+
+        if self.tensor_flip_transform is not None:
+            # perform tensor transforms on images in the tensor and the
+            # corresponding caption, e.g. random horizontal flips
+            # Reason: single version of the caption should appear => random flip
+            # should be performed on all images in a bag
+            images_caption = self.tensor_flip_transform(image=images, caption=caption)
+            images, caption = images_caption["image"], images_caption["caption"]
+
+        # print(images)
+        # print(caption)
+
+        # # # debugging
+        # print("Checkpoint 5")
+
+        # caption tokens
+        caption_tokens = self.caption_transform(caption=caption)["caption"]
+
+        # # # debugging
+        # print("Checkpoint 6")
+
         return {
-            "image_ids": torch.tensor(image_ids, dtype=torch.long), # ((Bag size, 1)
-            "images": torch.stack(images, dim=0), # (Bag size, Channel, Height, Width)
+            "image_ids": torch.tensor(image_ids, dtype=torch.long), #(bag_size,1)
+            "images": images,
             "caption_tokens": torch.tensor(caption_tokens, dtype=torch.long),
-            "noitpac_tokens": torch.tensor(caption_tokens, dtype=torch.long).flip(0),
-            "caption_lengths": torch.tensor(len(caption_tokens), dtype=torch.long),
+            "noitpac_tokens": torch.tensor(caption_tokens,
+                                           dtype=torch.long).flip(0),
+            "caption_lengths": torch.tensor(len(caption_tokens),
+                                            dtype=torch.long),
         }
 
     def collate_fn(
-        self, data: List[Dict[str, torch.Tensor]]
+            self, data: List[Dict[str, torch.Tensor]]
     ) -> Dict[str, torch.Tensor]:
-
         # Pad `caption_tokens` and `masked_labels` up to this length.
         caption_tokens = torch.nn.utils.rnn.pad_sequence(
             [d["caption_tokens"] for d in data],
@@ -116,5 +150,6 @@ class ArchCaptioningDatasetExtended(Dataset):
             "image": torch.stack([d["images"] for d in data], dim=0),
             "caption_tokens": caption_tokens,
             "noitpac_tokens": noitpac_tokens,
-            "caption_lengths": torch.stack([d["caption_lengths"] for d in data]),
+            "caption_lengths": torch.stack(
+                [d["caption_lengths"] for d in data]),
         }
