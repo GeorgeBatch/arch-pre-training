@@ -1,21 +1,22 @@
-# Understanding all of the code involved in VirTex pre-training
+# Understanding all code involved in VirTex pre-training
 
 This document is my attempt to connect all the files involved in VirTex
 pre-training in some systematic fashion and understand which of them need to be modified in order to pre-train models on the ARCH dataset.
 
 ## Building Vocabulary
 
-**COCO:**
+### COCO
 
 `scripts/build_vocabulary.py` is the main script for building COCO vocabulary.
 It uses the original file with the train set of COCO captions:  `datasets/coco/annotations/captions_train2017.json`
 
-**ARCH:**
+### ARCH
 
 1. Create one file with all the captions I want to use in the training set during pre-training on ARCH: `datasets/arch/annotations/captions_train.json`
-2. Make `scripts/build_vocabulary_arch.py` for building ARCH vocabulary: remove dulplicate captions since they occur when there is more than one image in the bag (figure) with the same caption. All images in a bag will be presented together with the corresponding caption so there is no reason to put more emphases on figures with multiple images than on figures with one image.
+2. Make `scripts/build_vocabulary_arch.py` for building ARCH vocabulary: remove 
+duplicate captions since they occur when there is more than one image in the bag (figure) with the same caption. All images in a bag will be presented together with the corresponding caption so there is no reason to put more emphases on figures with multiple images than on figures with one image.
 
-TODO: understand the senetence length - should I use the default 30 words?
+**TODO:** understand the sentence length - should I use the default 30 words?
 
 ## Pre-training
 
@@ -69,7 +70,7 @@ and an optional argument of the `override_list`. The default values set in
   :class:`PretrainingModelFactory` because both use same config parameter 
   `MODEL.NAME` to create objects.
 
-TODO: check all the model changes that are needed.
+**TODO:** check all the model changes that are needed.
 
 * **NAME.VISUAL**: "torchvision::resnet50" -> "torchvision::resnet18"
 * **NAME.TEXTUAL**: H=1024 (VirTex) -> H=512 (ARCH); A:=H/64=8, and F:=4H=2048
@@ -106,7 +107,7 @@ This also required to
 `ImageTransformsFactory` classes in `virtex/factories.py`.
   * `ImageTransformsFactory` got an extra line defining 
     special `tensor_horizontal_flip` operation:
-```python
+```Python
 "tensor_horizontal_flip": partial(T.TensorHorizontalFlip, p=0.5)
 ```
   * `PretrainingDatasetFactory` gets
@@ -170,21 +171,24 @@ They are both fully specified by their respective names in the config file:
 **MODEL.NAME.VISUAL** and **MODEL.NAME.TEXTUAL**.
 
 **TODO:**
-* check if ResNet-18 works
-* add batch-normalization layer to it at the front
+1. check if ResNet-18 works 
+2. add batch-normalization layer to it at the front
 
 ----
 ### 4. OptimizerFactory
 `OptimizerFactory` class from `virtex/factories.py` creates an optimizer directly from config
 
-**TODO:** understand which parameters to put into config to have the same optimization as in the paper.
+**TODO:**
+1. Understand which parameters to put into config to have the same optimization as in the paper.
+2. Add Adam optimizer as an option
 
 ----
 ### 5. LRSchedulerFactory
-`LRSchedulerFactory` class from `virtex/factories.py` creates an lr sheduler directly from config. All schedulers have a built-in LR warmup schedule before actual LR scheduling (decay) starts.
+`LRSchedulerFactory` class from `virtex/factories.py` creates a learning-rate
+scheduler directly from config. All schedulers have a built-in LR warmup schedule before actual LR scheduling (decay) starts.
 
 **TODO:** understand which parameters to put into config to have the same lr schedule as in the paper.
 
 ----
 ### 6. The rest
-The rest of the custom iports seem to be fine and do not need any input.
+The rest of the custom imports seem to be fine and do not need any input.
