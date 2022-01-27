@@ -66,9 +66,7 @@ conda install jupyter # to run in notebooks
 
 5. Install this codebase as a package in development version.
 
-    .. code-block:: shell
-
-        python setup.py develop
+python setup.py develop
 
 Now you can ``import virtex`` from anywhere as long as you have this conda
 environment activated.
