@@ -37,6 +37,7 @@ MODEL:
     NAME: "torchvision::resnet18" # changed: 50 -> 18
     PRETRAINED: false
     FROZEN: false
+    BATCHNORM_ON_INPUT: true # changed: introduced new option
 
   TEXTUAL:
     NAME: "transdec_postnorm::L1_H512_A8_F2048" # changed: H=1024 (VirTex) -> H=512 (ARCH); A:=H/64=8, and F:=4H=2048

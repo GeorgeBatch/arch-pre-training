@@ -37,8 +37,13 @@ class TorchvisionVisualBackbone(VisualBackbone):
         visual_feature_size: int = 2048,
         pretrained: bool = False,
         frozen: bool = False,
+        batchnorm_on_input: bool = False
     ):
         super().__init__(visual_feature_size)
+
+        self.batchnorm_on_input = batchnorm_on_input
+        if self.batchnorm_on_input:
+            self.input_bn_layer = nn.BatchNorm2d(num_features=3)
 
         self.cnn = getattr(torchvision.models, name)(
             pretrained, zero_init_residual=True
@@ -64,6 +69,10 @@ class TorchvisionVisualBackbone(VisualBackbone):
             A tensor of shape ``(batch_size, channels, height, width)``, for
             example it will be ``(batch_size, 2048, 7, 7)`` for ResNet-50.
         """
+
+        # TODO: check batchnorm on input in TorchvisionVisualBackbone.forward()
+        if self.batchnorm_on_input:
+            image = self.input_bn_layer(image)
 
         for idx, (name, layer) in enumerate(self.cnn.named_children()):
             out = layer(image) if idx == 0 else layer(out)

@@ -132,6 +132,8 @@ class Config(object):
         _C.MODEL.VISUAL.PRETRAINED = False
         # Whether to keep visual backbone frozen and train only textual head.
         _C.MODEL.VISUAL.FROZEN = False
+        # Whether to perform batch-normalization over an input batch
+        _C.MODEL.VISUAL.BATCHNORM_ON_INPUT = False
 
         _C.MODEL.TEXTUAL = CN()
         # Name of textual head. Set to "none" for MODEL.NAME = "*_classification".

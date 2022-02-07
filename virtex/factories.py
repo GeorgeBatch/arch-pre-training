@@ -334,13 +334,13 @@ class VisualBackboneFactory(Factory):
 
         _C = config
         kwargs = {"visual_feature_size": _C.MODEL.VISUAL.FEATURE_SIZE}
-
         if "torchvision" in _C.MODEL.VISUAL.NAME:
             # Check the name for models from torchvision.
             cnn_name = _C.MODEL.VISUAL.NAME.split("::")[-1]
             kwargs["pretrained"] = _C.MODEL.VISUAL.PRETRAINED
             kwargs["frozen"] = _C.MODEL.VISUAL.FROZEN
-
+            # added `batchnorm_on_input: bool` option for ARCH pre-training
+            kwargs["batchnorm_on_input"] = _C.MODEL.VISUAL.BATCHNORM_ON_INPUT
             return cls.create("torchvision", cnn_name, **kwargs)
         else:
             return cls.create(_C.MODEL.VISUAL.NAME, **kwargs)
@@ -504,8 +504,8 @@ class CaptionDecoderFactory(Factory):
             kwargs["nucleus_size"] = _C.MODEL.DECODER.NUCLEUS_SIZE
 
         return cls.create(_C.MODEL.DECODER.NAME, **kwargs)
-        
-        
+
+
 class OptimizerFactory(Factory):
     r"""Factory to create optimizers. Possible choices: ``{"sgd", "adamw"}``."""
 
