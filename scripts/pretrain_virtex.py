@@ -9,6 +9,8 @@ from torch.cuda import amp
 from torch.utils.data import DataLoader, DistributedSampler
 from torch.utils.tensorboard import SummaryWriter
 
+from torchsummary import summary
+
 # fmt: off
 from virtex.config import Config
 from virtex.factories import (
@@ -62,6 +64,10 @@ def main(_A: argparse.Namespace):
     train_dataset = PretrainingDatasetFactory.from_config(_C, split="train")
     val_dataset = PretrainingDatasetFactory.from_config(_C, split="val")
 
+    # debugging
+    print("len(train_dataset):", len(train_dataset))
+    print("len(val_dataset):", len(val_dataset))
+
     # Make `DistributedSampler`s to shard datasets across GPU processes.
     # Skip this if training on CPUs.
     train_sampler = (
@@ -74,6 +80,11 @@ def main(_A: argparse.Namespace):
         if _A.num_gpus_per_machine > 0
         else None
     )
+
+    # debugging
+    print("train_sampler:", train_sampler)
+    print("val_sampler:", val_sampler)
+
     train_dataloader = DataLoader(
         train_dataset,
         batch_size=_C.OPTIM.BATCH_SIZE // dist.get_world_size(),
@@ -94,10 +105,29 @@ def main(_A: argparse.Namespace):
         drop_last=False,
         collate_fn=val_dataset.collate_fn,
     )
+    # debugging
+    print("len(train_dataloader):", len(train_dataloader))
+    print("len(train_dataloader.dataset):", len(train_dataloader.dataset))
+    print("len(val_dataloader):", len(val_dataloader))
+    print("len(val_dataloader.dataset):", len(val_dataloader.dataset))
 
     model = PretrainingModelFactory.from_config(_C).to(device)
+    # debugging
+    # print(model)
+    summary(model.visual, (3, 224, 224))
+    # summary(model, (3, 224, 224)) # does not work
+
     optimizer = OptimizerFactory.from_config(_C, model.named_parameters())
+    # debugging
+    print("type(optimizer):", type(optimizer))
+
     scheduler = LRSchedulerFactory.from_config(_C, optimizer)
+    # debugging
+    print("type(scheduler):", type(scheduler))
+
+    # break
+    print("\n", '#'*80)
+    print("Stupid way to break:", 1 / 0)
 
     # -------------------------------------------------------------------------
     #   BEFORE TRAINING STARTS
