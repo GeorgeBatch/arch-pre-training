@@ -19,7 +19,7 @@ class ArchCaptionsDatasetRaw(Dataset):
         split:  Name of ARCH split to read. One of ``{"train", "val", "all"}``.
     """
 
-    def __init__(self, data_root: str, source: str='both', split: str=''):
+    def __init__(self, data_root: str, source: str = 'both', split: str = ''):
         allowed_source_values = ['pubmed', 'books', 'both']
         assert source in allowed_source_values, f"source should be one of {allowed_source_values}"
         allowed_split_values = ['train', 'val', 'all']
@@ -27,7 +27,8 @@ class ArchCaptionsDatasetRaw(Dataset):
 
         # Get path to the annotation file
         captions = json.load(
-            open(os.path.join(data_root, "annotations", f"captions_{split}.json"))
+            open(os.path.join(data_root, "annotations",
+                              f"captions_{split}.json"))
         )
 
         # Collect list of uuids and file paths for each caption
@@ -43,18 +44,20 @@ class ArchCaptionsDatasetRaw(Dataset):
                 absolut_path = f"{data_root}/{ann['path']}"
 
                 # make a check that the image exist before adding its `uuid` or `path`
-                assert os.path.exists(absolut_path), f"{absolut_path} does not exist!"
+                assert os.path.exists(
+                    absolut_path), f"{absolut_path} does not exist!"
 
                 captions_to_image_filepaths[ann['caption']].append(absolut_path)
                 # uuid (string); intid (int)
                 captions_to_uuids[ann['caption']].append(ann['uuid'])
                 captions_to_intids[ann['caption']].append(int(idx))
-        #print(captions_per_image)
+        # print(captions_per_image)
 
         # Keep all annotations in memory. Make a list of tuples, each tuple
         # is ``(list[image_id], list[file_path], captions)``.
         self.instances = [
-            (captions_to_intids[caption], captions_to_image_filepaths[caption], caption)
+            (captions_to_intids[caption], captions_to_image_filepaths[caption],
+             caption)
             for caption in captions_to_image_filepaths.keys()
         ]
 

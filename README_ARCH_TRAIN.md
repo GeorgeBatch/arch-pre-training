@@ -81,11 +81,33 @@ assumed to be relative to project root):
 Train the base VirTex model with ResNet-50 visual backbone; and a textual head
 with ``L = 1, H = 1024`` using all default optimization hyperparameters.
 
+
+**CPU**:
 ```shell
 python scripts/pretrain_virtex.py \
     --config configs/_arch_bicaptioning_R_18_L1_H512.yaml \
     --num-gpus-per-machine 0 \
     --cpu-workers 2 \
+    --serialization-dir /tmp/VIRTEX_R_18_L1_H512
+    # Default: --checkpoint-every 2000 --log-every 20
+```
+
+**GPU - DEBUGGING**:
+```shell
+python scripts/pretrain_virtex.py \
+    --config configs/_arch_bicaptioning_R_18_L1_H512.yaml \
+    --num-gpus-per-machine 1 \
+    --cpu-workers 4 \
+    --serialization-dir /tmp/VIRTEX_R_18_L1_H512
+    # Default: --checkpoint-every 2000 --log-every 20
+```
+
+**GPU - FULL ON**:
+```shell
+python scripts/pretrain_virtex.py \
+    --config configs/_arch_bicaptioning_R_18_L1_H512.yaml \
+    --num-gpus-per-machine 4 \
+    --cpu-workers 32 \
     --serialization-dir /tmp/VIRTEX_R_18_L1_H512
     # Default: --checkpoint-every 2000 --log-every 20
 ```
